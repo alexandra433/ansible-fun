@@ -2,7 +2,6 @@
 - name: generate ssh key
   expect:
     command: "ssh-keygen"
-    echo: true
     responses:
       'Enter file.*:': ''
       'Overwrite \(y\/n\)\?': 'yes'
@@ -19,11 +18,11 @@
 
 - name: ssh-copy key to remote server
   expect:
-  command: "ssh-copy-id {{ remoteuser }}@{{ remotehost }}"
+    command: "ssh-copy-id {{ remoteuser }}@{{ remotehost }}"
     responses:
       'Are you sure.*connecting \(yes\/no\/\[fingerprint\]\)\?': 'yes'
       'password:': ''
-  echo: true
+    echo: true
   register: copy_output
   become: true
   become_user: root
