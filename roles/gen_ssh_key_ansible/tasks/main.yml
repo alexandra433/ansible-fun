@@ -19,11 +19,11 @@
 
 - name: ssh-copy key to remote server
   expect:
-    command: "ssh-copy-id {{ remoteuser }}@{{ remotehost }}"
-      responses:
-        'Are you sure.*connecting \(yes\/no\/\[fingerprint\]\)\?': 'yes'
-        'password:': ''
-    echo: true
+  command: "ssh-copy-id {{ remoteuser }}@{{ remotehost }}"
+    responses:
+      'Are you sure.*connecting \(yes\/no\/\[fingerprint\]\)\?': 'yes'
+      'password:': ''
+  echo: true
   register: copy_output
   become: true
   become_user: root
