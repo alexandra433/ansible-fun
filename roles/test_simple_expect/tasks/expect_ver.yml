@@ -15,5 +15,10 @@
       'Nonexistent question': "shouldn't need this answer"
       'Enter file.*:': 'ansible-test-pie.txt'
     echo: true
+  register: output
   become: true
   become_user: root
+
+- name: Show output from script
+  debug:
+    var: output.stdout
