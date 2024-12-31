@@ -27,9 +27,9 @@
   expect:
     command: "{{ home_dir }}/read-input.sh"
     responses:
-      - 'pie\?': 'key lime'
-      - 'Nonexistent question': "shouldn't need this answer"
-      - 'Enter file.*:': 'ansible-test-pie.txt'
+      'pie\?': 'key lime'
+      'Nonexistent question': "shouldn't need this answer"
+      'Enter file.*:': 'ansible-test-pie.txt'
     echo: true
   become: true
   become_user: root
