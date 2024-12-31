@@ -1,0 +1,19 @@
+---
+- name: Download pexpect
+  apt:
+    name: python3-pexpect
+    update_cache: yes
+  become: true
+  become_user: root
+  when: ansible_distribution == "Debian"
+
+- name: Run the bash script and provide responses
+  expect:
+    command: "{{ home_dir }}/read-input.sh"
+    responses:
+      'pie\?': 'key lime'
+      'Nonexistent question': "shouldn't need this answer"
+      'Enter file.*:': 'ansible-test-pie.txt'
+    echo: true
+  become: true
+  become_user: root
