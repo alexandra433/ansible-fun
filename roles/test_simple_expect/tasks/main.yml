@@ -15,6 +15,7 @@
     owner: "{{ home_user }}"
     group: "{{ home_user }}"
     mode: "0666"
+    state: directory
   become: true
   become_user: root
 
