@@ -21,7 +21,7 @@
     command: "ssh-copy-id {{ scp_user }}@{{ scp_host }}"
     responses:
       'Are you sure.*connecting \(yes\/no\/\[fingerprint\]\)\?': 'yes'
-      'password:': ''
+      '.*password:': '{{ user_pass }}'
     echo: true
   register: copy_output
   become: true
