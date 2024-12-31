@@ -13,8 +13,14 @@
   include_tasks: perl_ver.yml
   when: expect_ver == 'perl'
 
-- name: Run script with ansible expect module
+- name: Run script with ansible expect module (if using)
   expect:
     command: "{{ home_dir }}/read-input.sh"
     responses:
+      - 'pie\?': 'key lime'
+      - 'Nonexistent question': 'shouldn't need this answer'
+      - 'Enter file.*:': 'ansible-test-pie.txt'
+    echo: true
+  become: true
+  become_user: root
   when: expect_ver == 'ansible'

@@ -91,3 +91,4 @@ Create ansible_usr on remote servers (server 1 and 2)
 
 - To run the simple expect test:
   - `ansible-playbook test_simple_expect.yml --extra-vars "survey_target=server2" -v`
+  - `ansible-playbook test_simple_expect.yml --extra-vars "survey_target=server2 expect-ver=ansible" -v`
