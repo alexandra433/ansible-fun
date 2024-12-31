@@ -17,11 +17,13 @@
 - name: Edit /etc/ssh/ssh_config (v2)
   include_tasks: edit_sshd_config.yml
   vars:
-    directive: '{{ item.directive }}'
-    delimiter: '{{ item.delimiter }}'
+    directive: '{{ edits.directive }}'
+    delimiter: '{{ edits.delimiter }}'
   loop:
     - { directive: "AllowUsers", delimiter: " " }
     - { directive: "Match User", delimiter: "," }
+  loop_control:
+    loop_var: edits
 
 - name: Restart ssh
   systemd:
