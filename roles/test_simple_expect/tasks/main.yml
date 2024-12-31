@@ -17,5 +17,4 @@
   expect:
     command: "{{ home_dir }}/read-input.sh"
     responses:
-
   when: expect_ver == 'ansible'
