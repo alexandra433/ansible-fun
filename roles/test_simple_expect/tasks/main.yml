@@ -9,6 +9,15 @@
   become: true
   become_user: root
 
+- name: Create testing directory
+  file:
+    path: "{{ home_dir }}/testing"
+    owner: "{{ home_user }}"
+    group: "{{ home_user }}"
+    mode: "0666"
+  become: true
+  become_user: root
+
 - name: Run script with perl (if using)
   include_tasks: perl_ver.yml
   when: expect_ver == 'perl'
