@@ -1,5 +1,5 @@
 resource "aws_instance" "ansible_server" {
-  ami             = "ami-0c7af5fe939f2677f" # redhat free tier
+  ami             = "ami-0e2c8caa4b6378d8c" # ubuntu free tier
   instance_type   = "t2.micro"
   key_name        = "A4L"
   vpc_security_group_ids = [aws_security_group.allow_ssh.id]
