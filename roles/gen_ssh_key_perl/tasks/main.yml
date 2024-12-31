@@ -1,4 +1,5 @@
 ---
+# Generates an ssh key and copies it to a server using the perl expect module
 - name: Download perl expect.pm
   apt:
     name: libexpect-perl
