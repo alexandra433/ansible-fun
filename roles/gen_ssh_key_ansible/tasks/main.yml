@@ -9,10 +9,25 @@
       'Enter passphrase \(empty for no passphrase\):': ''
       'Enter same passphrase again:': ''
     echo: true
-  register: output
+  register: gen_output
   become: true
   become_user: root
 
-- name: print output
+- name: print keygen output
   debug:
-    var: output
+    var: gen_output
+
+- name: ssh-copy key to remote server
+  expect:
+    command: "ssh-copy-id {{ remoteuser }}\@{{ remotehost }}"
+      responses:
+        'Are you sure.*connecting \(yes\/no\/\[fingerprint\]\)\?': 'yes'
+        'password:': ''
+    echo: true
+  register: copy_output
+  become: true
+  become_user: root
+
+- name: print ssh-copy output
+  debug:
+    var: copy_output
