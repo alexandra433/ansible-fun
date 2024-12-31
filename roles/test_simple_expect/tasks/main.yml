@@ -1,0 +1,21 @@
+---
+- name: Template in the bash script
+  template:
+    src: read-input.sh.j2
+    dest: "{{ home_dir }}/read-input.sh"
+    owner: "{{ home_user }}"
+    group: "{{ home_user }}"
+    mode: '0777'
+  become: true
+  become_user: root
+
+- name: Run script with perl (if using)
+  include_tasks: perl_ver.yml
+  when: expect_ver == 'perl'
+
+- name: Run script with ansible expect module
+  expect:
+    command: "{{ home_dir }}/read-input.sh"
+    responses:
+
+  when: expect_ver == 'ansible'

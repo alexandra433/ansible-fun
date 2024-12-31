@@ -1,0 +1,5 @@
+---
+- name: Test a simple use case of the expect module
+  hosts: "{{ survey_target }}"
+  roles:
+    - test-simple-expect

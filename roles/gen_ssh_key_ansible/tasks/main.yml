@@ -1,0 +1,9 @@
+---
+- name: generate ssh key
+  expect:
+    command: "ssh-keygen"
+    echo: true
+    responses:
+      ''
+  become: true
+  become_user: root
