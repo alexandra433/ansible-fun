@@ -1,0 +1,3 @@
+---
+home_user: myuser1
+home_dir: "/home/{{ home_user }}"

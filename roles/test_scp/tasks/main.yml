@@ -1,0 +1,15 @@
+---
+- name: Create a file to scp
+  copy:
+    src: testing.txt
+    dest: "{{ home_dir }}/testing.txt"
+    owner: "{{ home_user }}"
+    group: "{{ home_user }}"
+    mode: '0777'
+  become: true
+  become_user: root
+
+- name: scp file
+  shell: "scp {{ home_dir }}/testing.txt {{ scp_user }}@{{ scp_host }}:/home/{{ scp_user }}"
+  become: true
+  become_user: root

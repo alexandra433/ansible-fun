@@ -1,0 +1,28 @@
+---
+- name: Download perl expect.pm
+  apt:
+    name: libexpect-perl
+    update_cache: yes
+  become: true
+  become_user: root
+  when: ansible_distribution == "Debian"
+
+- name: Template in keygen perl script
+  template:
+    src: keygen.pl.j2
+    dest: "{{ home_dir }}/keygen.pl"
+    owner: "{{ home_user }}"
+    group: "{{ home_user }}"
+    mode: '0777'
+  become: true
+  become_user: root
+
+- name: Run the keygen script
+  shell: "perl {{ home_dir }}/keygen.pl {{ scp_host }} {{ scp_user }} {{ user_pass }}"
+  register: output
+  become: true
+  become_user: root
+
+- name: Show output from script
+  debug:
+    var: output.stdout

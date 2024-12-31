@@ -1,0 +1,32 @@
+---
+# Create user with ssh access through password authentication
+- name: Create user
+  user:
+    name: "{{ username }}"
+    create_home: yes
+    password: "{{ survey_pass|password_hash('sha512') }}"
+    groups: sudo
+  become: true
+  become_user: root
+
+# - name: Edit /etc/ssh/ssh_config
+#   include_tasks: edit_sshd_config.yml
+#   become: true
+#   become_user: root
+
+- name: Edit /etc/ssh/ssh_config (v2)
+  include_tasks: edit_sshd_config.yml
+  vars:
+    directive: '{{ item.directive }}'
+    delimiter: '{{ item.delimiter }}'
+  loop:
+    - { directive: "AllowUsers", delimiter: " " }
+    - { directive: "Match User", delimiter: "," }
+
+- name: Restart ssh
+  systemd:
+    name: ssh
+    state: restarted
+  when: ansible_distribution == "Debian"
+  become: true
+  become_user: root

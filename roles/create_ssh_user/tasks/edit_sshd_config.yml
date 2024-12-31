@@ -1,0 +1,26 @@
+---
+- name: Check if user is already configured in sshd_config
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: "{{ item }}.*{{ username }}"
+    state: absent
+  check_mode: yes
+  register: findings
+  loop:
+    - "AllowUsers"
+    - "Match User"
+
+- name: Edit /etc/ssh/sshd_config
+  lineinfile:
+    # https://www.reddit.com/r/ansible/comments/zyu6r9/playbook_to_append_a_word_to_end_of_a_specific/
+    path: /etc/ssh/sshd_config
+    regexp: "^({{ item.name }}.*)[ \t]*"
+    line: '\1{{ item.delimiter }}{{ username }}'
+    backrefs: true
+    backup: yes
+  loop:
+    - { name: "AllowUsers", delimiter: " ", is_present: '{{ findings.results[0].found }}' }
+    - { name: "Match User", delimiter: ",", is_present: '{{ findings.results[1].found }}' }
+  when: item.is_present | int == 0
+  become: true
+  become_user: root

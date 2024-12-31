@@ -1,0 +1,6 @@
+---
+- name: Generate ssh key and send public key to remote server, then scp file
+  hosts: "{{ survey_target }}"
+  roles:
+    - generate_ssh_key
+    - test_scp

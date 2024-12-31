@@ -1,0 +1,19 @@
+---
+- name: Check if user already added config file directive
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: "{{ directive }}.*{{ username }}"
+    state: absent
+  check_mode: yes
+  register: directive_present
+- name: Edit /etc/ssh/sshd_config directive
+  lineinfile:
+    # https://www.reddit.com/r/ansible/comments/zyu6r9/playbook_to_append_a_word_to_end_of_a_specific/
+    path: /etc/ssh/sshd_config
+    regexp: "^({{ directive }}.*)[ \t]*"
+    line: '\1{{ delimiter }}{{ username }}'
+    backrefs: true
+    backup: yes
+  when: not directive_present.found
+  become: true
+  become_user: root
