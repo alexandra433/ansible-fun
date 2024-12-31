@@ -4,6 +4,15 @@
     command: "ssh-keygen"
     echo: true
     responses:
-      ''
+      'Enter file.*:': ''
+      'Overwrite \(y\/n\)\?': 'yes'
+      'Enter passphrase \(empty for no passphrase\):': ''
+      'Enter same passphrase again:': ''
+    echo: true
+  register: output
   become: true
   become_user: root
+
+- name: print output
+  debug:
+    var: output
