@@ -3,5 +3,6 @@ module "testing_servers" {
 }
 
 module "a4l_network" {
-  source = "./a4l-modules/network"
+  source = "./a4l_modules/network"
+  region = var.aws_region
 }
