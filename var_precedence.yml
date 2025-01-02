@@ -7,6 +7,8 @@
   vars:
     testing: "play vars win"
   roles:
+    - vars_only # the testing2 variable from this role will be used in vars_precedence role
+    - var_precedence
     # - name: var_precedence
     #   vars:
     #     testing: "role params win"
@@ -16,10 +18,10 @@
     # - name: var_precedence
 
     # Using different role params will cause the role to be executed twice
-    - name: var_precedence
-      vars:
-        testing: "role execution 1"
-    - name: var_precedence
-      vars:
-        testing: "role execution 2"
+    # - name: var_precedence
+    #   vars:
+    #     testing: "role execution 1"
+    # - name: var_precedence
+    #   vars:
+    #     testing: "role execution 2"
 
