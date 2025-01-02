@@ -3,7 +3,7 @@
 # ansible-playbook var_precedence.yml --extra-vars "survey_target=server2 testing='extra vars always win'" -v
 - name: test variable precedence
   hosts: "{{ survey_target }}"
-  # vars:
-  #   testing: "play vars win"
+  vars:
+    testing: "play vars win"
   roles:
     - var_precedence
