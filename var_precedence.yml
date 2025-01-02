@@ -9,6 +9,7 @@
   roles:
     - vars_only # the testing2 variable from this role will be used in vars_precedence role
     - var_precedence
+
     # - name: var_precedence
     #   vars:
     #     testing: "role params win"
