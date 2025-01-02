@@ -6,6 +6,10 @@
   vars:
     testing: "play vars win"
   roles:
+    # - name: var_precedence
+    #   vars:
+    #     testing: "role params win"
     - name: var_precedence
-      vars:
-        testing: "role params win"
+    - name: var_precedence
+
+# role defaults < inventory vars < play vars < role vars < role params < extra vars
