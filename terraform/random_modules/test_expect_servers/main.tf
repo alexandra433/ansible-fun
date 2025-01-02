@@ -1,7 +1,7 @@
 resource "aws_instance" "ansible_server" {
-  ami             = "ami-0e2c8caa4b6378d8c" # ubuntu free tier
-  instance_type   = "t2.micro"
-  key_name        = "A4L"
+  ami                    = "ami-0e2c8caa4b6378d8c" # ubuntu free tier
+  instance_type          = "t2.micro"
+  key_name               = "A4L"
   vpc_security_group_ids = [aws_security_group.allow_ssh.id]
 
   tags = {
@@ -10,9 +10,9 @@ resource "aws_instance" "ansible_server" {
 }
 
 resource "aws_instance" "server1" {
-  ami             = "ami-064519b8c76274859" # debian free tier
-  instance_type   = "t2.micro"
-  key_name        = "A4L"
+  ami                    = "ami-064519b8c76274859" # debian free tier
+  instance_type          = "t2.micro"
+  key_name               = "A4L"
   vpc_security_group_ids = [aws_security_group.allow_ssh.id]
 
   tags = {
@@ -21,9 +21,9 @@ resource "aws_instance" "server1" {
 }
 
 resource "aws_instance" "server2" {
-  ami             = "ami-064519b8c76274859" # debian free tier
-  instance_type   = "t2.micro"
-  key_name        = "A4L"
+  ami                    = "ami-064519b8c76274859" # debian free tier
+  instance_type          = "t2.micro"
+  key_name               = "A4L"
   vpc_security_group_ids = [aws_security_group.allow_ssh.id]
 
   tags = {

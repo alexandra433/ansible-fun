@@ -10,5 +10,5 @@ terraform {
 
 provider "aws" {
   profile = "iamadmin-general"
-  region = var.aws_region
+  region  = var.aws_region
 }

@@ -3,7 +3,7 @@ Terraform was already downloaded and aws configure (iamadmin-general for SAA cer
 
 Commands:
 -----------------
-- terraform fmt
+- terraform fmt -recursive
   - auto format code
 - terraform init
 - terraform plan
