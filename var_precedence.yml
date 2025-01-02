@@ -15,3 +15,11 @@
     # - name: var_precedence
     # - name: var_precedence
 
+    # Using different role params will cause the role to be executed twice
+    - name: var_precedence
+      vars:
+        testing: "role execution 1"
+    - name: var_precedence
+      vars:
+        testing: "role execution 2"
+
