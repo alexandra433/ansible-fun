@@ -2,3 +2,7 @@
 - name: Print variable
   debug:
     var: testing
+
+- name: Print another variable
+  debug:
+    var: testing2

@@ -1,2 +1,3 @@
 ---
 testing: "role defaults win"
+testing2: "Avoid undefined var"

@@ -2,6 +2,7 @@
 # ansible-playbook var_precedence.yml --extra-vars "survey_target=server2" -v
 # ansible-playbook var_precedence.yml --extra-vars "survey_target=server2 testing='extra vars always win'" -v
 - name: test variable precedence
+  # role defaults < inventory vars < play vars < role vars < role params < extra vars
   hosts: "{{ survey_target }}"
   vars:
     testing: "play vars win"
@@ -9,7 +10,8 @@
     # - name: var_precedence
     #   vars:
     #     testing: "role params win"
-    - name: var_precedence
-    - name: var_precedence
 
-# role defaults < inventory vars < play vars < role vars < role params < extra vars
+    # Calling a role more than once will result in only the first once being executed
+    # - name: var_precedence
+    # - name: var_precedence
+
