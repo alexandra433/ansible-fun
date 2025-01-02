@@ -6,4 +6,6 @@
   vars:
     testing: "play vars win"
   roles:
-    - var_precedence
+    - name: var_precedence
+      vars:
+        testing: "role params win"
