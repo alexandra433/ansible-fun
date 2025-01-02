@@ -1,0 +1,7 @@
+---
+- name: test variable precedence
+  hosts: "{{ survey_target }}"
+  vars:
+    testing: "play vars win"
+  roles:
+    - var_precendence
