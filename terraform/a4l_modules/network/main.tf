@@ -17,7 +17,8 @@ resource "aws_subnet" "a4l_subnets" {
   availability_zone = join("", [var.region, each.value.availability_zone])
   cidr_block        = each.value.cidr_block_ipv4
   # https://developer.hashicorp.com/terraform/language/functions/replace
-  ipv6_cidr_block = join("", [replace(aws_vpc.a4l_vpc1.ipv6_cidr_block, "/00::/56/", ""), each.value.cidr_block_ipv6])
+  ipv6_cidr_block                 = join("", [replace(aws_vpc.a4l_vpc1.ipv6_cidr_block, "/00::/56/", ""), each.value.cidr_block_ipv6])
+  assign_ipv6_address_on_creation = true
 
   tags = {
     Name = each.key
