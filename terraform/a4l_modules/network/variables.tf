@@ -5,7 +5,6 @@ variable "region" {
 
 variable "subnets_map" {
   type = map(object({
-    name              = string
     availability_zone = string
     cidr_block_ipv4   = string
     cidr_block_ipv6   = string
