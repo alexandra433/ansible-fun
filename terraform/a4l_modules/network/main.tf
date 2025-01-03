@@ -21,5 +21,6 @@ resource "aws_subnet" "a4l_subnets" {
 
   tags = {
     Name = each.key
+    Type = "a4l_subnet"
   }
 }
