@@ -1,3 +1,4 @@
+# Ansible stuff
 output "test_server1_ip" {
   value = module.testing_servers.server1_ip
 }
