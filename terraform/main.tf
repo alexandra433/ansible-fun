@@ -3,6 +3,7 @@ module "testing_servers" {
 }
 
 # AWS SAA stuff
+# terraform destroy -target module.a4l_network -target module.a4l_app_instance
 module "a4l_network" {
   source = "./a4l_modules/network"
   region = var.aws_region

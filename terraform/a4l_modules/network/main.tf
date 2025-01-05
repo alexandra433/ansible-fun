@@ -66,3 +66,137 @@ resource "aws_route_table_association" "rta-c" {
   subnet_id      = aws_subnet.a4l_subnets["sn-web-C"].id
   route_table_id = aws_route_table.a4l-vpc1-rt-web.id
 }
+
+# NAT Gateways
+resource "aws_nat_gateway" "A4L-vpc1-natgw-A" {
+  allocation_id = aws_eip.A4L-vpc1-natgw-A-eip.id
+  subnet_id = aws_subnet.a4l_subnets["sn-web-A"].id
+
+  tags = {
+    Name = "A4L-vpc1-natgw-A_tf"
+  }
+
+  # from docs
+  depends_on = [aws_internet_gateway.a4l-vpc1-igw]
+}
+
+resource "aws_eip" "A4L-vpc1-natgw-A-eip" {
+  domain       = "vpc"
+}
+
+resource "aws_nat_gateway" "A4L-vpc1-natgw-B" {
+  allocation_id = aws_eip.A4L-vpc1-natgw-B-eip.id
+  subnet_id = aws_subnet.a4l_subnets["sn-web-B"].id
+
+  tags = {
+    Name = "A4L-vpc1-natgw-B_tf"
+  }
+
+  # from docs
+  depends_on = [aws_internet_gateway.a4l-vpc1-igw]
+}
+
+resource "aws_eip" "A4L-vpc1-natgw-B-eip" {
+  domain       = "vpc"
+}
+
+resource "aws_nat_gateway" "A4L-vpc1-natgw-C" {
+  allocation_id = aws_eip.A4L-vpc1-natgw-C-eip.id
+  subnet_id = aws_subnet.a4l_subnets["sn-web-C"].id
+
+  tags = {
+    Name = "A4L-vpc1-natgw-C_tf"
+  }
+
+  # from docs
+  depends_on = [aws_internet_gateway.a4l-vpc1-igw]
+}
+
+resource "aws_eip" "A4L-vpc1-natgw-C-eip" {
+  domain       = "vpc"
+}
+
+
+resource "aws_route_table" "a4l-vpc1-rt-private-A" {
+  vpc_id = aws_vpc.a4l_vpc1.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    nat_gateway_id = aws_nat_gateway.A4L-vpc1-natgw-A.id
+  }
+
+  tags = {
+    Name = "a4l-vpc1-rt-private-A-tf"
+  }
+}
+
+resource "aws_route_table" "a4l-vpc1-rt-private-B" {
+  vpc_id = aws_vpc.a4l_vpc1.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    nat_gateway_id = aws_nat_gateway.A4L-vpc1-natgw-B.id
+  }
+
+  tags = {
+    Name = "a4l-vpc1-rt-private-B-tf"
+  }
+}
+
+resource "aws_route_table" "a4l-vpc1-rt-private-C" {
+  vpc_id = aws_vpc.a4l_vpc1.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    nat_gateway_id = aws_nat_gateway.A4L-vpc1-natgw-C.id
+  }
+
+  tags = {
+    Name = "a4l-vpc1-rt-private-C-tf"
+  }
+}
+
+resource "aws_route_table_association" "app-rta-a" {
+  subnet_id      = aws_subnet.a4l_subnets["sn-app-A"].id
+  route_table_id = aws_route_table.a4l-vpc1-rt-private-A.id
+}
+
+resource "aws_route_table_association" "app-rta-b" {
+  subnet_id      = aws_subnet.a4l_subnets["sn-app-B"].id
+  route_table_id = aws_route_table.a4l-vpc1-rt-private-B.id
+}
+
+resource "aws_route_table_association" "app-rta-c" {
+  subnet_id      = aws_subnet.a4l_subnets["sn-app-C"].id
+  route_table_id = aws_route_table.a4l-vpc1-rt-private-C.id
+}
+
+resource "aws_route_table_association" "reserved-rta-a" {
+  subnet_id      = aws_subnet.a4l_subnets["sn-reserved-A"].id
+  route_table_id = aws_route_table.a4l-vpc1-rt-private-A.id
+}
+
+resource "aws_route_table_association" "reserved-rta-b" {
+  subnet_id      = aws_subnet.a4l_subnets["sn-reserved-B"].id
+  route_table_id = aws_route_table.a4l-vpc1-rt-private-B.id
+}
+
+resource "aws_route_table_association" "reserved-rta-c" {
+  subnet_id      = aws_subnet.a4l_subnets["sn-reserved-C"].id
+  route_table_id = aws_route_table.a4l-vpc1-rt-private-C.id
+}
+
+resource "aws_route_table_association" "db-rta-a" {
+  subnet_id      = aws_subnet.a4l_subnets["sn-db-A"].id
+  route_table_id = aws_route_table.a4l-vpc1-rt-private-A.id
+}
+
+resource "aws_route_table_association" "db-rta-b" {
+  subnet_id      = aws_subnet.a4l_subnets["sn-db-B"].id
+  route_table_id = aws_route_table.a4l-vpc1-rt-private-B.id
+}
+
+resource "aws_route_table_association" "db-rta-c" {
+  subnet_id      = aws_subnet.a4l_subnets["sn-db-C"].id
+  route_table_id = aws_route_table.a4l-vpc1-rt-private-C.id
+}
