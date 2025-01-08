@@ -18,8 +18,7 @@ resource "aws_subnet" "a4l_subnets" {
   cidr_block                      = each.value.cidr_block_ipv4
   ipv6_cidr_block                 = join("", [replace(aws_vpc.a4l_vpc1.ipv6_cidr_block, "/00::/56/", ""), each.value.cidr_block_ipv6])
   assign_ipv6_address_on_creation = true
-  map_public_ip_on_launch = each.value.is_public
-  # map_public_ip_on_launch         = "${strcontains(each.key, "web") ? true : false}"
+  map_public_ip_on_launch         = each.value.is_public
 
   tags = {
     Name = each.key
@@ -55,16 +54,16 @@ resource "aws_route_table" "a4l-vpc1-rt-web" {
 
 resource "aws_route_table_association" "rta-web" {
   # would like this to just be a list like ["sn-web-A", "sn-web-B", "sn-web-C"] instead of a map
-  for_each = {for sn_key, sn_value in var.subnets_map : sn_key => sn_value if sn_value.is_public}
+  for_each = { for sn_key, sn_value in var.subnets_map : sn_key => sn_value if sn_value.is_public }
 
-  subnet_id =  aws_subnet.a4l_subnets[each.key].id
+  subnet_id      = aws_subnet.a4l_subnets[each.key].id
   route_table_id = aws_route_table.a4l-vpc1-rt-web.id
 }
 
 # NAT Gateways
 resource "aws_nat_gateway" "A4L-vpc1-natgw-A" {
   allocation_id = aws_eip.A4L-vpc1-natgw-A-eip.id
-  subnet_id = aws_subnet.a4l_subnets["sn-web-A"].id
+  subnet_id     = aws_subnet.a4l_subnets["sn-web-A"].id
 
   tags = {
     Name = "A4L-vpc1-natgw-A_tf"
@@ -75,12 +74,12 @@ resource "aws_nat_gateway" "A4L-vpc1-natgw-A" {
 }
 
 resource "aws_eip" "A4L-vpc1-natgw-A-eip" {
-  domain       = "vpc"
+  domain = "vpc"
 }
 
 resource "aws_nat_gateway" "A4L-vpc1-natgw-B" {
   allocation_id = aws_eip.A4L-vpc1-natgw-B-eip.id
-  subnet_id = aws_subnet.a4l_subnets["sn-web-B"].id
+  subnet_id     = aws_subnet.a4l_subnets["sn-web-B"].id
 
   tags = {
     Name = "A4L-vpc1-natgw-B_tf"
@@ -91,12 +90,12 @@ resource "aws_nat_gateway" "A4L-vpc1-natgw-B" {
 }
 
 resource "aws_eip" "A4L-vpc1-natgw-B-eip" {
-  domain       = "vpc"
+  domain = "vpc"
 }
 
 resource "aws_nat_gateway" "A4L-vpc1-natgw-C" {
   allocation_id = aws_eip.A4L-vpc1-natgw-C-eip.id
-  subnet_id = aws_subnet.a4l_subnets["sn-web-C"].id
+  subnet_id     = aws_subnet.a4l_subnets["sn-web-C"].id
 
   tags = {
     Name = "A4L-vpc1-natgw-C_tf"
@@ -107,7 +106,7 @@ resource "aws_nat_gateway" "A4L-vpc1-natgw-C" {
 }
 
 resource "aws_eip" "A4L-vpc1-natgw-C-eip" {
-  domain       = "vpc"
+  domain = "vpc"
 }
 
 
@@ -115,7 +114,7 @@ resource "aws_route_table" "a4l-vpc1-rt-private-A" {
   vpc_id = aws_vpc.a4l_vpc1.id
 
   route {
-    cidr_block = "0.0.0.0/0"
+    cidr_block     = "0.0.0.0/0"
     nat_gateway_id = aws_nat_gateway.A4L-vpc1-natgw-A.id
   }
 
@@ -128,7 +127,7 @@ resource "aws_route_table" "a4l-vpc1-rt-private-B" {
   vpc_id = aws_vpc.a4l_vpc1.id
 
   route {
-    cidr_block = "0.0.0.0/0"
+    cidr_block     = "0.0.0.0/0"
     nat_gateway_id = aws_nat_gateway.A4L-vpc1-natgw-B.id
   }
 
@@ -141,7 +140,7 @@ resource "aws_route_table" "a4l-vpc1-rt-private-C" {
   vpc_id = aws_vpc.a4l_vpc1.id
 
   route {
-    cidr_block = "0.0.0.0/0"
+    cidr_block     = "0.0.0.0/0"
     nat_gateway_id = aws_nat_gateway.A4L-vpc1-natgw-C.id
   }
 
