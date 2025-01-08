@@ -1,7 +1,7 @@
 **Provision servers**
 ----------------------------
 Launch a t2.micro Ubuntu instance for the ansible controller node
-Create two more t2.micro instances (chose Debian). Update inventory.ini file with their public ips
+Create two more t2.micro instances (chose Debian for now). Update inventory.ini file with their public ips
 
 
 **Ansible Server Setup**
@@ -35,7 +35,7 @@ git clone https://github.com/alexandra433/ansible-fun.git
 -------------------------
 Create ansible_usr on remote servers (server 1 and 2)
 - need password-based ssh access to server
-  - Creating user with password (on server1)
+  - Creating user with password
     - `sudo useradd -m ansible_usr`
     - `sudo passwd ansible_usr`
     - testing1274
@@ -77,8 +77,6 @@ Create ansible_usr on remote servers (server 1 and 2)
         "unreachable": true
     }
     ```
-  - Uncomment `ansible_ssh_pass=testing1274` in inventory.ini
-  - Note: can consider adding `host_key_checking = false` to `[defaults]` in ansible.cfg
 - Create myuser1 on both servers:
   - `ansible-playbook create_ssh_user.yml --extra-vars "survey_target=server1 username=myuser1 survey_pass=testing127 ansible_ssh_pass=testing1274" -v`
   - `ansible-playbook create_ssh_user.yml --extra-vars "survey_target=server2 username=myuser1 survey_pass=testing127 ansible_ssh_pass=testing1274" -v`
