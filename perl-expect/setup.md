@@ -81,8 +81,7 @@ Create ansible_usr on remote servers (server 1 and 2)
   - `ansible-playbook create_ssh_user.yml --extra-vars "survey_target=server1 username=myuser1 survey_pass=testing127 ansible_ssh_pass=testing1274" -v`
   - `ansible-playbook create_ssh_user.yml --extra-vars "survey_target=server2 username=myuser1 survey_pass=testing127 ansible_ssh_pass=testing1274" -v`
 - Created testuser on server1
-  - Without password in ini file: `ansible-playbook create_ssh_user.yml --extra-vars "survey_target=server1 survey_pass=testing127" --ask-pass -v`
-  - With password: `ansible-playbook create_ssh_user.yml --extra-vars "survey_target=server1 survey_pass=testing127 ansible_ssh_pass=testing1274" -v`
+  - `ansible-playbook create_ssh_user.yml --extra-vars "survey_target=server1 survey_pass=testing127 ansible_ssh_pass=testing1274" -v`
 - Run the generate_ssh_key script on server2
   - `ansible-playbook keygen_and_scp.yml --extra-vars "survey_target=server2 scp_host=ec2-44-201-206-211.compute-1.amazonaws.com scp_user=testuser user_pass=testing127 ansible_ssh_pass=testing1274" -v`
     - scp_host should be dns of server1
