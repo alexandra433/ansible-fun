@@ -18,7 +18,8 @@ resource "aws_subnet" "a4l_subnets" {
   cidr_block                      = each.value.cidr_block_ipv4
   ipv6_cidr_block                 = join("", [replace(aws_vpc.a4l_vpc1.ipv6_cidr_block, "/00::/56/", ""), each.value.cidr_block_ipv6])
   assign_ipv6_address_on_creation = true
-  map_public_ip_on_launch         = each.value.auto_assign_ipv4
+  map_public_ip_on_launch = each.value.is_public
+  # map_public_ip_on_launch         = "${strcontains(each.key, "web") ? true : false}"
 
   tags = {
     Name = each.key
@@ -52,18 +53,11 @@ resource "aws_route_table" "a4l-vpc1-rt-web" {
   }
 }
 
-resource "aws_route_table_association" "rta-a" {
-  subnet_id      = aws_subnet.a4l_subnets["sn-web-A"].id
-  route_table_id = aws_route_table.a4l-vpc1-rt-web.id
-}
+resource "aws_route_table_association" "rta-web" {
+  # would like this to just be a list like ["sn-web-A", "sn-web-B", "sn-web-C"] instead of a map
+  for_each = {for sn_key, sn_value in var.subnets_map : sn_key => sn_value if sn_value.is_public}
 
-resource "aws_route_table_association" "rta-b" {
-  subnet_id      = aws_subnet.a4l_subnets["sn-web-B"].id
-  route_table_id = aws_route_table.a4l-vpc1-rt-web.id
-}
-
-resource "aws_route_table_association" "rta-c" {
-  subnet_id      = aws_subnet.a4l_subnets["sn-web-C"].id
+  subnet_id =  aws_subnet.a4l_subnets[each.key].id
   route_table_id = aws_route_table.a4l-vpc1-rt-web.id
 }
 
