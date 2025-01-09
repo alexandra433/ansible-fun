@@ -1,5 +1,5 @@
 resource "aws_instance" "ansible_server" {
-  ami                    = "ami-0e2c8caa4b6378d8c" # ubuntu free tier
+  ami                    = var.ubuntu_ami_us_east_1
   instance_type          = "t2.micro"
   key_name               = "A4L"
   vpc_security_group_ids = [aws_security_group.allow_ssh.id]
@@ -9,25 +9,47 @@ resource "aws_instance" "ansible_server" {
   }
 }
 
-resource "aws_instance" "server1" {
-  ami                    = "ami-064519b8c76274859" # debian free tier
+resource "aws_instance" "deb_server1" {
+  ami                    = var.debian_ami_us_east_1
   instance_type          = "t2.micro"
   key_name               = "A4L"
   vpc_security_group_ids = [aws_security_group.allow_ssh.id]
 
   tags = {
-    Name = "server1_tf"
+    Name = "deb_server1_tf"
   }
 }
 
-resource "aws_instance" "server2" {
-  ami                    = "ami-064519b8c76274859" # debian free tier
+resource "aws_instance" "deb_server2" {
+  ami                    = var.debian_ami_us_east_1
   instance_type          = "t2.micro"
   key_name               = "A4L"
   vpc_security_group_ids = [aws_security_group.allow_ssh.id]
 
   tags = {
-    Name = "server2_tf"
+    Name = "deb_server2_tf"
+  }
+}
+
+resource "aws_instance" "rh_server1" {
+  ami                    = var.redhat_ami_us_east_1
+  instance_type          = "t2.micro"
+  key_name               = "A4L"
+  vpc_security_group_ids = [aws_security_group.allow_ssh.id]
+
+  tags = {
+    Name = "rh_server1_tf"
+  }
+}
+
+resource "aws_instance" "rh_server2" {
+  ami                    = var.redhat_ami_us_east_1
+  instance_type          = "t2.micro"
+  key_name               = "A4L"
+  vpc_security_group_ids = [aws_security_group.allow_ssh.id]
+
+  tags = {
+    Name = "rh_server2_tf"
   }
 }
 

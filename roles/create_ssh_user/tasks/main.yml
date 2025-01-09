@@ -24,8 +24,12 @@
     - { directive: "Match User", delimiter: "," }
   loop_control:
     loop_var: edits
+  register: result
 
-# maybe handler? to restart ssh only when file is changed?
+- name: print result
+  debug:
+    var: result
+
 - name: Restart ssh
   systemd:
     name: ssh

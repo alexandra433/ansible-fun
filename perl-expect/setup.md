@@ -31,6 +31,20 @@ cd ~
 git clone https://github.com/alexandra433/ansible-fun.git
 ```
 
+Setup Ansible vault:
+- Create a vault password file to store the vault password used to encrypt other files
+  - On the ansible server, create a file with the vault password (do not add to version control)
+    - `echo '<vault password>' > .vault_pass`
+  - Edit the `ansible.cfg` file to include the location of the password file so that you don't have to provide it when running ansible commands or when encrypting with `ansible-vault `
+  ```
+    [defaults]
+    . . .
+    vault_password_file = ./.vault_pass
+  ```
+- Create files with passwords
+  - `ansible-vault create <passwordfilename>`
+  - If you set up ansible.cfg, you should not have to enter a vault password
+
 **Remote servers setup**
 -------------------------
 Create ansible_usr on remote servers (server 1 and 2)
@@ -38,7 +52,7 @@ Create ansible_usr on remote servers (server 1 and 2)
   - Creating user with password
     - `sudo useradd -m ansible_usr`
     - `sudo passwd ansible_usr`
-    - testing1274
+    - enter password
   - Giving user ssh access https://linuxconfig.org/how-to-enable-and-disable-ssh-for-user-on-linux
     - `sudo nano /etc/ssh/sshd_config`
     - Add the following lines to the end of the file https://serverfault.com/questions/285800/how-to-disable-ssh-login-with-password-for-some-users:
@@ -63,7 +77,6 @@ Create ansible_usr on remote servers (server 1 and 2)
 -------------------------
 - On ansible server, cd to git repo: `cd ansible-fun`
 - Ping the hosts first
-  - comment out `ansible_ssh_pass=testing1274` in inventory.ini temporarily for this to avoid `Using a SSH password instead of a key is not possible because Host Key checking is enabled and sshpass does not support this.  Please add this host's fingerprint to your known_hosts file to manage this host.`
   - `ansible all -m ping -i inventory.ini`
     - You'll see something like this. It is fine
     ```
@@ -78,16 +91,15 @@ Create ansible_usr on remote servers (server 1 and 2)
     }
     ```
 - Create myuser1 on both servers:
-  - `ansible-playbook create_ssh_user.yml --extra-vars "survey_target=server1 username=myuser1 survey_pass=testing127 ansible_ssh_pass=testing1274" -v`
-  - `ansible-playbook create_ssh_user.yml --extra-vars "survey_target=server2 username=myuser1 survey_pass=testing127 ansible_ssh_pass=testing1274" -v`
+  - `ansible-playbook create_ssh_user.yml --extra-vars "survey_target=server1 username=myuser1 survey_pass=" --ask-pass -v`
+  - `ansible-playbook create_ssh_user.yml --extra-vars "survey_target=server2 username=myuser1 survey_pass=" --ask-pass -v`
 - Created testuser on server1
-  - `ansible-playbook create_ssh_user.yml --extra-vars "survey_target=server1 survey_pass=testing127 ansible_ssh_pass=testing1274" -v`
+  - `ansible-playbook create_ssh_user.yml --extra-vars "survey_target=server1 survey_pass=" --ask-pass -v`
 - Run the generate_ssh_key script on server2
-  - `ansible-playbook keygen_and_scp.yml --extra-vars "survey_target=server2 scp_host=ec2-44-201-206-211.compute-1.amazonaws.com scp_user=testuser user_pass=testing127 ansible_ssh_pass=testing1274" -v`
+  - `ansible-playbook keygen_and_scp.yml --extra-vars "survey_target=server2 scp_host=ec2-44-211-191-35.compute-1.amazonaws.com scp_user=testuser user_pass=" --ask-pass -v`
     - scp_host should be dns of server1
 
 - To run the simple expect test:
-  - `ansible-playbook test_simple_expect.yml --extra-vars "survey_target=server2 ansible_ssh_pass=testing1274" -v`
-  - `ansible-playbook test_simple_expect.yml --extra-vars "survey_target=server2 expect_ver=ansible ansible_ssh_pass=testing1274" -v`
+  - `ansible-playbook test_simple_expect.yml --extra-vars "survey_target=server2" --ask-pass -v`
+  - `ansible-playbook test_simple_expect.yml --extra-vars "survey_target=server2 expect_ver=ansible" --ask-pass -v`
 
-**Ansible Vault**
