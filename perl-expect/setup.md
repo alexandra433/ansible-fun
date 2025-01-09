@@ -52,6 +52,8 @@ Setup Ansible vault:
   ansible_usr_pass: !vault | $ANSIBLE_VAULT; ...
   survey_pass: !vault | $ANSIBLE_VAULT; ...
   ```
+  - `ansible_ssh_pass: "{{ ansible_usr_pass }}"` was added to `hosts.yml`
+
 
 **Remote servers setup**
 -------------------------
@@ -99,7 +101,7 @@ Create ansible_usr on remote servers (server 1 and 2)
     }
     ```
 - Create myuser1 on both servers:
-  - `ansible-playbook create_ssh_user.yml --extra-vars "survey_target=server1 username=myuser1 survey_pass=" --ask-pass -v`
+  - `ansible-playbook create_ssh_user.yml --extra-vars "survey_target=deb_server1 username=myuser1 survey_pass=ssh_user_pass ansible_ssh_pass=ansible_ssh_pass" -v`
   - `ansible-playbook create_ssh_user.yml --extra-vars "survey_target=server2 username=myuser1 survey_pass=" --ask-pass -v`
 - Created testuser on server1
   - `ansible-playbook create_ssh_user.yml --extra-vars "survey_target=server1 survey_pass=" --ask-pass -v`
