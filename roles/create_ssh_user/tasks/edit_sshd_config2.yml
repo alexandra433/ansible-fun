@@ -6,6 +6,8 @@
     state: absent
   check_mode: yes
   register: directive_present
+  become: true
+  become_user: root
 - name: Edit /etc/ssh/sshd_config directive
   lineinfile:
     # https://www.reddit.com/r/ansible/comments/zyu6r9/playbook_to_append_a_word_to_end_of_a_specific/
