@@ -77,6 +77,7 @@ Create ansible_usr on remote servers (server 1 and 2)
     Match User ansible_usr
       PasswordAuthentication yes
     ```
+      - `ec2-user` instead of `admin` for aws redhat
   - Make ansible_usr a sudoer without password
     ```
     sudo visudo
@@ -118,3 +119,6 @@ Create ansible_usr on remote servers (server 1 and 2)
   - `ansible-playbook test_simple_expect.yml --extra-vars "survey_target=server2" --ask-pass -v`
   - `ansible-playbook test_simple_expect.yml --extra-vars "survey_target=server2 expect_ver=ansible" --ask-pass -v`
 
+Other tidbits:
+----------------------------
+Run `ansible <host> -m setup` to see facts gathered

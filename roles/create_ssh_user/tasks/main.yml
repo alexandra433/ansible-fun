@@ -1,11 +1,22 @@
 ---
 # Create user with ssh access through password authentication
-- name: Create user
+- name: Create user with sudoer privileges (Debian)
   user:
     name: "{{ username }}"
     create_home: yes
     password: "{{ survey_pass|password_hash('sha512') }}"
     groups: sudo
+  when: ansible_distribution == "Debian"
+  become: true
+  become_user: root
+
+- name: Create user with sudoer privileges (RedHat)
+  user:
+    name: "{{ username }}"
+    create_home: yes
+    password: "{{ survey_pass|password_hash('sha512') }}"
+    groups: wheel
+  when: ansible_distribution == "RedHat"
   become: true
   become_user: root
 
@@ -30,10 +41,19 @@
   debug:
     var: result
 
-- name: Restart ssh
+# Consider only restarting when sshd_config is changed
+- name: Restart ssh (Debian)
   systemd:
     name: ssh
     state: restarted
   when: ansible_distribution == "Debian"
+  become: true
+  become_user: root
+
+- name: Restart sshd (Redhat)
+  systemd:
+    name: sshd
+    state: restarted
+  when: ansible_distribution == "RedHat"
   become: true
   become_user: root

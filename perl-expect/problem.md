@@ -174,7 +174,8 @@ Create ansible_usr on remote servers (server 1 and 2)
     - testing1274
   - Giving user ssh access https://linuxconfig.org/how-to-enable-and-disable-ssh-for-user-on-linux
     - `sudo nano /etc/ssh/sshd_config`
-    - Add `AllowUsers admin ansible_usr` to end of file
+    - Add `AllowUsers admin ansible_usr` to end of file (aws debian)
+      - `ec2-user` instead of `admin` for aws redhat
     - Add the following lines https://serverfault.com/questions/285800/how-to-disable-ssh-login-with-password-for-some-users:
     ```
     Match User ansible_usr
