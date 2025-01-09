@@ -26,7 +26,7 @@
 #   become_user: root
 
 - name: Edit /etc/ssh/ssh_config (v2)
-  include_tasks: edit_sshd_config.yml
+  include_tasks: edit_sshd_config2.yml
   vars:
     directive: '{{ edits.directive }}'
     delimiter: '{{ edits.delimiter }}'
