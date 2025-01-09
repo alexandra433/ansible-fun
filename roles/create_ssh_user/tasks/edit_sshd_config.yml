@@ -9,6 +9,8 @@
   loop:
     - "AllowUsers"
     - "Match User"
+  become: true
+  become_user: root
 
 - name: Edit /etc/ssh/sshd_config
   lineinfile:
