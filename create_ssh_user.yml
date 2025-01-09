@@ -2,6 +2,6 @@
 - name: Create a user with password-based ssh access to server
   hosts: "{{ survey_target }}"
   vars:
-    - survey_pass: "{{ ssh_user_pass }}"
+    survey_pass: "{{ ssh_user_pass }}"
   roles:
     - create_ssh_user

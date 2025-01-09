@@ -53,6 +53,11 @@ Setup Ansible vault:
   survey_pass: !vault | $ANSIBLE_VAULT; ...
   ```
   - `ansible_ssh_pass: "{{ ansible_usr_pass }}"` was added to `hosts.yml`
+  - Added the following to relevant playbooks
+  ```
+  vars:
+    survey_pass: "{{ ssh_user_pass }}"
+  ```
 
 
 **Remote servers setup**
@@ -101,12 +106,12 @@ Create ansible_usr on remote servers (server 1 and 2)
     }
     ```
 - Create myuser1 on both servers:
-  - `ansible-playbook create_ssh_user.yml --extra-vars "survey_target=deb_server1 username=myuser1 survey_pass=ssh_user_pass ansible_ssh_pass=ansible_ssh_pass" -v`
-  - `ansible-playbook create_ssh_user.yml --extra-vars "survey_target=server2 username=myuser1 survey_pass=" --ask-pass -v`
+  - `ansible-playbook create_ssh_user.yml --extra-vars "survey_target=deb_server1 username=myuser1" -v`
+  - `ansible-playbook create_ssh_user.yml --extra-vars "survey_target=server2 username=myuser1" -v`
 - Created testuser on server1
-  - `ansible-playbook create_ssh_user.yml --extra-vars "survey_target=server1 survey_pass=" --ask-pass -v`
+  - `ansible-playbook create_ssh_user.yml --extra-vars "survey_target=server1" -v`
 - Run the generate_ssh_key script on server2
-  - `ansible-playbook keygen_and_scp.yml --extra-vars "survey_target=server2 scp_host=ec2-44-211-191-35.compute-1.amazonaws.com scp_user=testuser user_pass=" --ask-pass -v`
+  - `ansible-playbook keygen_and_scp.yml --extra-vars "survey_target=server2 scp_host=ec2-44-211-191-35.compute-1.amazonaws.com scp_user=testuser" -v`
     - scp_host should be dns of server1
 
 - To run the simple expect test:

@@ -1,7 +1,9 @@
 ---
 - name: Generate ssh key and send public key to remote server, then scp file
   hosts: "{{ survey_target }}"
+  vars:
+    user_pass: "{{ ssh_user_pass }}"
   roles:
-    # - gen_ssh_key_perl
-    - gen_ssh_key_ansible
+    - gen_ssh_key_perl
+    #- gen_ssh_key_ansible
     - test_scp
