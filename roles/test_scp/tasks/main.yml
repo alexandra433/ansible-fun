@@ -13,3 +13,10 @@
   shell: "scp {{ home_dir }}/testing.txt {{ scp_user }}@{{ scp_host }}:/home/{{ scp_user }}"
   become: true
   become_user: root
+
+- name: Delete test file
+  file:
+    path: "{{ home_dir }}/testing.txt"
+    state: absent
+  become: true
+  become_user: root

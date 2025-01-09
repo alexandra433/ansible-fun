@@ -107,11 +107,11 @@ Create ansible_usr on remote servers (server 1 and 2)
     ```
 - Create myuser1 on both servers:
   - `ansible-playbook create_ssh_user.yml --extra-vars "survey_target=deb_server1 username=myuser1" -v`
-  - `ansible-playbook create_ssh_user.yml --extra-vars "survey_target=server2 username=myuser1" -v`
+  - `ansible-playbook create_ssh_user.yml --extra-vars "survey_target=deb_server2 username=myuser1" -v`
 - Created testuser on server1
-  - `ansible-playbook create_ssh_user.yml --extra-vars "survey_target=server1" -v`
+  - `ansible-playbook create_ssh_user.yml --extra-vars "survey_target=deb_server1" -v`
 - Run the generate_ssh_key script on server2
-  - `ansible-playbook keygen_and_scp.yml --extra-vars "survey_target=server2 scp_host=ec2-44-211-191-35.compute-1.amazonaws.com scp_user=testuser" -v`
+  - `ansible-playbook keygen_and_scp.yml --extra-vars "survey_target=deb_server2 scp_host=ec2-44-211-191-35.compute-1.amazonaws.com scp_user=testuser" -v`
     - scp_host should be dns of server1
 
 - To run the simple expect test:
