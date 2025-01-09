@@ -41,9 +41,10 @@ Setup Ansible vault:
     . . .
     vault_password_file = ./.vault_pass
   ```
+- https://www.reddit.com/r/ansible/comments/q0wzgh/proper_password_management_in_playbookshosts_files/
 - Generate encrypted passwords using command: `ansible-vault encrypt_string '<password>' --name "<nametoidentifypassword>"`. Save the output (`!vault | $ANSIBLE_VAULT; ...`) for later
   - `ansible-vault encrypt_string '<password>' --name "ansible_usr_pass"`
-  - `ansible-vault encrypt_string '<password>' --name "survey_pass"`
+  - `ansible-vault encrypt_string '<password>' --name "ssh_user_pass"`
   - If you set up ansible.cfg with vault_password_file, you shouldn't be prompted for a password
 - Inside the group_vars directory, create a file `all.yml` Past the outputs of the previous commands into it
   ```
