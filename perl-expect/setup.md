@@ -33,7 +33,7 @@ git clone https://github.com/alexandra433/ansible-fun.git
 
 Setup Ansible vault:
 - Create a vault password file to store the vault password used to encrypt other files
-  - On the ansible server, create a file with the vault password (do not add to version control)
+  - On the ansible server, create a file with the vault password (do not add to version control) inside the ansible directory
     - `echo '<vault password>' > .vault_pass`
   - Edit the `ansible.cfg` file to include the location of the password file so that you don't have to provide it when running ansible commands or when encrypting with `ansible-vault `
   ```
@@ -41,9 +41,16 @@ Setup Ansible vault:
     . . .
     vault_password_file = ./.vault_pass
   ```
-- Create files with passwords
-  - `ansible-vault create <passwordfilename>`
-  - If you set up ansible.cfg, you should not have to enter a vault password
+- Generate encrypted passwords using command: `ansible-vault encrypt_string '<password>' --name "<nametoidentifypassword>"`. Save the output (`!vault | $ANSIBLE_VAULT; ...`) for later
+  - `ansible-vault encrypt_string '<password>' --name "ansible_usr_pass"`
+  - `ansible-vault encrypt_string '<password>' --name "survey_pass"`
+  - If you set up ansible.cfg with vault_password_file, you shouldn't be prompted for a password
+- Inside the group_vars directory, create a file `all.yml` Past the outputs of the previous commands into it
+  ```
+  ---
+  ansible_usr_pass: !vault | $ANSIBLE_VAULT; ...
+  survey_pass: !vault | $ANSIBLE_VAULT; ...
+  ```
 
 **Remote servers setup**
 -------------------------
