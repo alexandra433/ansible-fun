@@ -1,0 +1,8 @@
+---
+- name: Create a user with password-based ssh access to server
+  hosts: "{{ survey_target }}"
+
+  tasks:
+    user:
+      name: ansible_usr
+      password: "{{ new_pass|password_hash('sha512') }}"
