@@ -1,5 +1,5 @@
 ---
-- name: Create a user with password-based ssh access to server
+- name: Change password of ansible_usr
   hosts: "{{ survey_target }}"
 
   tasks:
