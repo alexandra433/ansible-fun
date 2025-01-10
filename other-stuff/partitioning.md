@@ -479,4 +479,3 @@ umount: /mnt/target_vol/root/: no mount point specified.
   5      4295MB  6872MB  2577MB  ext4         var
   6      6872MB  8589MB  1717MB  ext4         tmp
   ```
-  - I hope that's good?

@@ -1,11 +1,13 @@
-First, partition the ec2 instance so that there is actually something to extend
+First, partition the ec2 instance so that there is actually something to extend besides just the root partition
 
 Then create a snapshot of that volume because there's too many steps
 
 **Extending a partition**
 ---------------------------------
 Going to increase size of hard disk and extend the partition for /tmp
-**Increase disk space**
+
+***Increase disk space***
+
 AWS console > click into the volume > modify > change size from 8 to 9 GiB
 - Once volume state is optimizing, can start messing around
 ```
@@ -33,7 +35,8 @@ Number  Start   End     Size    File system  Name                  Flags
 
 (parted)
 ```
-**Increase /tmp**
+***Increase /tmp***
+
 current size:
 ```
 root@ip-172-31-93-26:~# df -h
@@ -95,5 +98,31 @@ Number  Start   End     Size    File system  Name                  Flags
 Information: You may need to update /etc/fstab.
 ```
 - Don't think you need to update `/etc/fstab` because the uuid number for `/tmp` (check with `lsblk -f`) still matches what's in the file
+- Not using LVM so don't need to run any `pvresize` or `lvresize` commands
+Resize the filesystem
+- if you run df -h right now `/tmp` will look the same size. Need ro resize the filesystem so that it fills the resized partition
+- `/sbin/resize2fs /dev/xvda6`
+  ```
+  admin@ip-172-31-93-26:~$ sudo /sbin/resize2fs /dev/xvda6
+  resize2fs 1.47.0 (5-Feb-2023)
+  Filesystem at /dev/xvda6 is mounted on /tmp; on-line resizing required
+  old_desc_blocks = 1, new_desc_blocks = 1
+  The filesystem on /dev/xvda6 is now 681228 (4k) blocks long.
 
+  admin@ip-172-31-93-26:~$ df -h
+  Filesystem      Size  Used Avail Use% Mounted on
+  udev            472M     0  472M   0% /dev
+  tmpfs            98M  500K   97M   1% /run
+  /dev/xvda3      2.2G  811M  1.3G  39% /
+  tmpfs           486M     0  486M   0% /dev/shm
+  tmpfs           5.0M     0  5.0M   0% /run/lock
+  /dev/xvda4      1.6G   52K  1.5G   1% /home
+  /dev/xvda6      2.6G   48K  2.4G   1% /tmp
+  /dev/xvda5      2.3G  252M  2.0G  12% /var
+  tmpfs            98M     0   98M   0% /run/user/1000
+  ```
 
+**Extending a partition that's not the very last one**
+---------------------------------
+Seeing what happens if I extend /home
+- Add another 1 GiB to the disk (9 -> 10 GiB) (have to wait 6 hours)
