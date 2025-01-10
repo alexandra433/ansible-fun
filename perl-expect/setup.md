@@ -116,8 +116,11 @@ Create ansible_usr on remote servers (server 1 and 2)
     - scp_host should be dns of server1
 
 - To run the simple expect test:
-  - `ansible-playbook test_simple_expect.yml --extra-vars "survey_target=server2" --ask-pass -v`
-  - `ansible-playbook test_simple_expect.yml --extra-vars "survey_target=server2 expect_ver=ansible" --ask-pass -v`
+  - `ansible-playbook test_simple_expect.yml --extra-vars "survey_target=server2" -v`
+  - `ansible-playbook test_simple_expect.yml --extra-vars "survey_target=server2 expect_ver=ansible" -v`
+
+- password change:
+  - `ansible-playbook change_ansible_pw.yml --extra-vars "survey_target=deb_server1 new_pass=" -v`
 
 Other tidbits:
 ----------------------------

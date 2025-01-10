@@ -3,6 +3,7 @@
   hosts: "{{ survey_target }}"
 
   tasks:
+  - name: change user password
     user:
       name: ansible_usr
       password: "{{ new_pass|password_hash('sha512') }}"
