@@ -7,3 +7,5 @@
     user:
       name: ansible_usr
       password: "{{ new_pass|password_hash('sha512') }}"
+    become_user: root
+    become: true
