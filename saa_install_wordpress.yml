@@ -12,6 +12,6 @@
 
 # git clone https://github.com/alexandra433/ansible-fun.git
 # cd ansible-fun
-# Edit ansible.cfg to remove the vault password part
+# Edit ansible.cfg to remove the vault password part, remove group_vars folder and hosts.yml
 # ansible-playbook saa_install_wordpress.yml --extra-vars "DBRootPassword=<insert_pw> DBPassword=<insert_pw>" -v
 # - For passwords, remember that some characters like $ need to be escaped
