@@ -28,5 +28,6 @@
 
 - name: Set Mariadb Root password
   shell: "mysqladmin -u root password {{ DBRootPassword }}"
+  no_log: true
   become: true
   become_user: root

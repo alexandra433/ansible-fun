@@ -7,7 +7,6 @@
   become: true
   become_user: root
 
-#
 - name: Move content out of wordpress folder
   shell: sudo cp -rvf /var/www/html/wordpress/* /var/www/html
   become: true

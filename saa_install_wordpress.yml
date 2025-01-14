@@ -14,3 +14,4 @@
 # cd ansible-fun
 # Edit ansible.cfg to remove the vault password part
 # ansible-playbook saa_install_wordpress.yml --extra-vars "DBRootPassword=<insert_pw> DBPassword=<insert_pw>" -v
+# - For passwords, remember that some characters like $ need to be escaped

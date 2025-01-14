@@ -9,6 +9,7 @@
 
 - name: Create db
   shell: "mysql -u root --password={{ DBRootPassword }} < /tmp/db.setup"
+  no_log: true
 
 - name: Remove setup file
   file:
