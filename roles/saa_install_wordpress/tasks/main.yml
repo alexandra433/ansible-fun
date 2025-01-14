@@ -1,6 +1,6 @@
 ---
 - name: Install and setup needed software
- - include_tasks: prework.yml
+  include_tasks: prework.yml
 
 - name: install wordpress
   include_tasks: install_wp.yml
