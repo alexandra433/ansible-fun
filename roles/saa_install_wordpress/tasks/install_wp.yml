@@ -7,12 +7,9 @@
   become: true
   become_user: root
 
-# sudo cp -rvf wordpress/* .
+#
 - name: Move content out of wordpress folder
-  copy:
-    dest: /var/www/html/
-    src: /var/www/html/wordpress/
-    # remote_src: yes # Just running this locally
+  shell: sudo cp -rvf /var/www/html/wordpress/* /var/www/html
   become: true
   become_user: root
 
