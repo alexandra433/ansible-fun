@@ -1,0 +1,34 @@
+---
+- name: Install system software
+  dnf:
+    name:
+      - wget
+      - php-mysqlnd
+      - httpd
+      - php-fpm
+      - php-mysqli
+      - mariadb105-server
+      - php-json
+      - php
+      - php-devel
+    state: present
+
+- name: start and enable httpd and mariadb
+  systemd:
+    name: "{{ item }}"
+    state: started
+    enabled: true
+  loop:
+    - httpd
+    - mariadb
+
+- name: Set Mariadb Root password
+  shell: "mysqladmin -u root password {{ DBRootPassword }}"
+  become: true
+  become_user: root
+
+- name: Install wordpress
+  unarchive:
+    dest: /var/www/html
+    src: http://wordpress.org/latest.tar.gz
+    remote_src: true

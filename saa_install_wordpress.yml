@@ -1,0 +1,6 @@
+---
+- name: Install wordpress
+  hosts: localhost
+  connection: local
+  roles:
+    - saa_install_wordpress
