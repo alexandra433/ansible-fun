@@ -13,7 +13,7 @@
     - { og_line: "database_name_here", replacement: "{{ DBName }}"}
     - { og_line: "username_here", replacement: "{{ DBUser }}"}
     - { og_line: "password_here", replacement: "{{ DBPassword }}"}
-  no_log: true
+  # no_log: true
   become: true
   become_user: root
 
