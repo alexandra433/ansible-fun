@@ -43,6 +43,6 @@
 - name: Move content out of wordpress folder
   copy:
     dest: /var/www/html
-    src: /var/www/html/wordpress
+    src: /var/www/html/wordpress/
   become: true
   become_user: root
