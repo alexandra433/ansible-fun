@@ -10,9 +10,9 @@
 - name: replace lines in wp-config.php
   shell: "{{ item }}"
   loop:
-    - "sed -i "s/'database_name_here'/'{{ DBName }}'/g" wp-config.php"
-    - "sed -i "s/'username_here'/'{{ DBUser }}'/g" wp-config.php"
-    - "sed -i "s/'password_here'/'{{ DBPassword }}'/g" wp-config.php"
+    - sed -i "s/'database_name_here'/'{{ DBName }}'/g" wp-config.php"
+    - sed -i "s/'username_here'/'{{ DBUser }}'/g" wp-config.php"
+    - sed -i "s/'password_here'/'{{ DBPassword }}'/g" wp-config.php"
   become: true
   become_user: root
 
