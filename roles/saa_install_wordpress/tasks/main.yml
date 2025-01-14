@@ -12,6 +12,8 @@
       - php
       - php-devel
     state: present
+  become: true
+  become_user: root
 
 - name: start and enable httpd and mariadb
   systemd:
@@ -21,6 +23,8 @@
   loop:
     - httpd
     - mariadb
+  become: true
+  become_user: root
 
 - name: Set Mariadb Root password
   shell: "mysqladmin -u root password {{ DBRootPassword }}"
@@ -32,3 +36,5 @@
     dest: /var/www/html
     src: http://wordpress.org/latest.tar.gz
     remote_src: true
+  become: true
+  become_user: root

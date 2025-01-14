@@ -4,3 +4,13 @@
   connection: local
   roles:
     - saa_install_wordpress
+
+
+# Set up (on Amazon Linux)
+# sudo yum update
+# sudo yum install ansible
+
+# git clone https://github.com/alexandra433/ansible-fun.git
+# cd ansible-fun
+# Edit ansible.cfg to remove the vault password part
+# ansible-playbook saa_install_wordpress.yml --extra-vars "DBRootPassword=<insert_pw> DBPassword=<insert_pw>" -v
