@@ -8,7 +8,7 @@
   replace:
     path: /var/www/html/wp-config.php
     regexp: "{{ item.og_line }}"
-    line: "{{ item.replacement }}"
+    replace: "{{ item.replacement }}"
   loop:
     - { og_line: "database_name_here", replacement: "{{ DBName }}"}
     - { og_line: "username_here", replacement: "{{ DBUser }}"}
