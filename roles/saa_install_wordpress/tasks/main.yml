@@ -1,48 +1,12 @@
 ---
-- name: Install system software
-  dnf:
-    name:
-      - wget
-      - php-mysqlnd
-      - httpd
-      - php-fpm
-      - php-mysqli
-      - mariadb105-server
-      - php-json
-      - php
-      - php-devel
-    state: present
-  become: true
-  become_user: root
+- name: Install and setup needed software
+ - include_tasks: prework.yml
 
-- name: start and enable httpd and mariadb
-  systemd:
-    name: "{{ item }}"
-    state: started
-    enabled: true
-  loop:
-    - httpd
-    - mariadb
-  become: true
-  become_user: root
+- name: install wordpress
+  include_tasks: install_wp.yml
 
-- name: Set Mariadb Root password
-  shell: "mysqladmin -u root password {{ DBRootPassword }}"
-  become: true
-  become_user: root
+- name: configure wordpress
+  include_tasks: wp_config.yml
 
-- name: Install wordpress
-  unarchive:
-    dest: /var/www/html
-    src: http://wordpress.org/latest.tar.gz
-    remote_src: true
-  become: true
-  become_user: root
-
-# sudo cp -rvf wordpress/* .
-- name: Move content out of wordpress folder
-  copy:
-    dest: /var/www/html
-    src: /var/www/html/wordpress/
-  become: true
-  become_user: root
+- name: create wordpress db
+  include_tasks: create_wp_db.yml

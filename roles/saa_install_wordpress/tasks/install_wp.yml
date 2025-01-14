@@ -1,0 +1,24 @@
+---
+- name: Install wordpress
+  unarchive:
+    dest: /var/www/html
+    src: http://wordpress.org/latest.tar.gz
+    remote_src: true
+  become: true
+  become_user: root
+
+# sudo cp -rvf wordpress/* .
+- name: Move content out of wordpress folder
+  copy:
+    dest: /var/www/html/
+    src: /var/www/html/wordpress/
+    # remote_src: yes # Just running this locally
+  become: true
+  become_user: root
+
+- name: delete wordpress folder
+  file:
+    state: absent
+    path: /var/www/html/wordpress/
+  become: true
+  become_user: root

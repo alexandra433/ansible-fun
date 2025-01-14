@@ -1,0 +1,32 @@
+---
+- name: Install system software
+  dnf:
+    name:
+      - wget
+      - php-mysqlnd
+      - httpd
+      - php-fpm
+      - php-mysqli
+      - mariadb105-server
+      - php-json
+      - php
+      - php-devel
+    state: present
+  become: true
+  become_user: root
+
+- name: start and enable httpd and mariadb
+  systemd:
+    name: "{{ item }}"
+    state: started
+    enabled: true
+  loop:
+    - httpd
+    - mariadb
+  become: true
+  become_user: root
+
+- name: Set Mariadb Root password
+  shell: "mysqladmin -u root password {{ DBRootPassword }}"
+  become: true
+  become_user: root

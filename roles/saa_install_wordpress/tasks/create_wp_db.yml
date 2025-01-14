@@ -1,0 +1,16 @@
+---
+- name: Template in db creation script
+  template:
+    dest: /tmp/db.setup
+    src: db.setup.j2
+    owner: '{{ ansible_enc.USER }}'
+    group: '{{ ansible_enc.USER }}'
+    mode: '0444'
+
+- name: Create db
+  shell: "mysql -u root --password={{ DBRootPassword }} < /tmp/db.setup"
+
+- name: Remove setup file
+  file:
+    path: /tmp/db.setup
+    state: absent

@@ -1,0 +1,27 @@
+---
+- name: Copy wordpress template file
+  copy:
+    src: /var/www/html/wp-config-sample.php
+    dest: /var/www/html/wp-config.php
+    # remote_src: yes
+  become: true
+  become_user: root
+
+- name: replace lines in wp-config.php
+  shell: "{{ item }}"
+  loop:
+    - "sed -i "s/'database_name_here'/'{{ DBName }}'/g" wp-config.php"
+    - "sed -i "s/'username_here'/'{{ DBUser }}'/g" wp-config.php"
+    - "sed -i "s/'password_here'/'{{ DBPassword }}'/g" wp-config.php"
+  become: true
+  become_user: root
+
+- name: chown files
+  file:
+    path: /var/www/html
+    owner: apache
+    group: apache
+    state: directory
+    recurse: true
+  become: true
+  become_user: root
