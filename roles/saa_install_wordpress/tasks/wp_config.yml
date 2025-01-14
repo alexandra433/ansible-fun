@@ -5,11 +5,14 @@
   become_user: root
 
 - name: replace lines in wp-config.php
-  shell: "{{ item }}"
+  lineinfile:
+    path: /var/www/html/wp-config.php
+    regexp: "{{ item.og_line }}"
+    line: "{{ item.replacement }}"
   loop:
-    - sed -i "s/'database_name_here'/'{{ DBName }}'/g" /var/www/html/wp-config.php
-    - sed -i "s/'username_here'/'{{ DBUser }}'/g" /var/www/html/wp-config.php
-    - sed -i "s/'password_here'/'{{ DBPassword | quote }}'/g" /var/www/html/wp-config.php
+    - { og_line: "database_name_here", replacement: "{{ DBName }}"}
+    - { og_line: "username_here", replacement: "{{ DBUser }}"}
+    - { og_line: "password_here", replacement: "{{ DBPassword }}"}
   no_log: true
   become: true
   become_user: root
