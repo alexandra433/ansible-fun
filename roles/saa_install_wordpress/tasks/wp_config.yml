@@ -5,7 +5,7 @@
   become_user: root
 
 - name: replace lines in wp-config.php
-  lineinfile:
+  replace:
     path: /var/www/html/wp-config.php
     regexp: "{{ item.og_line }}"
     line: "{{ item.replacement }}"
