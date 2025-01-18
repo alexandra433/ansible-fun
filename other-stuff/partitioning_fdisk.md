@@ -123,69 +123,48 @@ Last sector, +/-sectors or +/-size{K,M,G,T,P} (2048-20971486, default 20969471):
 
 Created a new partition 1 of type 'Linux filesystem' and of size 4 MiB.
 
+Command (m for help): t
+Partition number (1-3, default 3): 1
+Partition type or alias (type L to list all): 4
+
+Changed type of partition 'Linux filesystem' to 'BIOS boot'.
+
+
 Command (m for help): n
-Partition type
-   p   primary (1 primary, 0 extended, 3 free)
-   e   extended (container for logical partitions)
-Select (default p): p
-Partition number (2-4, default 2): 2
-First sector (10240-20971519, default 10240):
-Last sector, +/-sectors or +/-size{K,M,G,T,P} (10240-20971519, default 20971519): +130M
+Partition number (1-128, default 1): 1
+First sector (2048-20971486, default 2048):
+Last sector, +/-sectors or +/-size{K,M,G,T,P} (2048-20971486, default 20969471): +4M
 
-Created a new partition 2 of type 'Linux' and of size 130 MiB.
+Created a new partition 1 of type 'Linux filesystem' and of size 4 MiB.
+
+Command (m for help): n
+Partition number (2-128, default 2): 2
+First sector (10240-20971486, default 10240):
+Last sector, +/-sectors or +/-size{K,M,G,T,P} (10240-20971486, default 20969471): +130M
+
+Created a new partition 2 of type 'Linux filesystem' and of size 130 MiB.
+
+Command (m for help): t
+Partition number (1-3, default 3): 2
+Partition type or alias (type L to list all): 1
+
+Changed type of partition 'Linux filesystem' to 'EFI System'.
 ```
 
-Created a partition of the rest of the disk
+Create a partition of the rest of the disk and make it a linux LVM:
 ```
 Command (m for help): n
-Partition type
-   p   primary (2 primary, 0 extended, 2 free)
-   e   extended (container for logical partitions)
-Select (default p): p
-Partition number (3,4, default 3): 3
-First sector (276480-20971519, default 276480):
-Last sector, +/-sectors or +/-size{K,M,G,T,P} (276480-20971519, default 20971519):
+Partition number (3-128, default 3): 3
+First sector (276480-20971486, default 276480):
+Last sector, +/-sectors or +/-size{K,M,G,T,P} (276480-20971486, default 20969471):
 
-Created a new partition 3 of type 'Linux' and of size 9.9 GiB.
-
-Command (m for help):
-```
-
-Make it a linux LVM:
-```
-Command (m for help): n
-Partition type
-   p   primary (2 primary, 0 extended, 2 free)
-   e   extended (container for logical partitions)
-Select (default p): p
-Partition number (3,4, default 3): 3
-First sector (276480-20971519, default 276480):
-Last sector, +/-sectors or +/-size{K,M,G,T,P} (276480-20971519, default 20971519):
-
-Created a new partition 3 of type 'Linux' and of size 9.9 GiB.
+Created a new partition 3 of type 'Linux filesystem' and of size 9.9 GiB.
 
 Command (m for help): t
 Partition number (1-3, default 3): 3
-Hex code or alias (type L to list all): L
+Partition type or alias (type L to list all): 43
 
-# Removed the list (L) output
-
-Hex code or alias (type L to list all): 8e
-
-Changed type of partition 'Linux' to 'Linux LVM'.
-
-Command (m for help): p
-Disk /dev/xvdb: 10 GiB, 10737418240 bytes, 20971520 sectors
-Units: sectors of 1 * 512 = 512 bytes
-Sector size (logical/physical): 512 bytes / 512 bytes
-I/O size (minimum/optimal): 512 bytes / 512 bytes
-Disklabel type: dos
-Disk identifier: 0x82c45ca8
-
-Device     Boot  Start      End  Sectors  Size Id Type
-/dev/xvdb1        2048    10239     8192    4M 83 Linux
-/dev/xvdb2       10240   276479   266240  130M 83 Linux
-/dev/xvdb3      276480 20971519 20695040  9.9G 8e Linux LVM
+Changed type of partition 'Linux filesystem' to 'Linux LVM'.
 ```
 
 Write changes with "w"
@@ -195,6 +174,38 @@ The partition table has been altered.
 Calling ioctl() to re-read partition table.
 Syncing disks.
 ```
+
+Output of fdisk afterwards
+```
+root@ip-172-31-30-15:/# fdisk -l /dev/xvdb
+Disk /dev/xvdb: 10 GiB, 10737418240 bytes, 20971520 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disklabel type: gpt
+Disk identifier: 9BE445F1-45BE-AF44-B579-E0C02D24CEFE
+
+Device      Start      End  Sectors  Size Type
+/dev/xvdb1   2048    10239     8192    4M BIOS boot
+/dev/xvdb2  10240   276479   266240  130M EFI System
+/dev/xvdb3 276480 20969471 20692992  9.9G Linux LVM
+```
+
+Unmount the volume target_vol and its partitions and attach it to the source instance
+```
+umount /mnt/target_vol/root/{dev,proc,run,sys,home,var,tmp,}
+
+root@ip-172-31-30-15:/# umount /mnt/target_vol/root/{dev,proc,run,sys,home,var,tmp,}
+umount: /mnt/target_vol/root/dev: no mount point specified.
+umount: /mnt/target_vol/root/proc: no mount point specified.
+umount: /mnt/target_vol/root/run: no mount point specified.
+umount: /mnt/target_vol/root/sys: no mount point specified.
+umount: /mnt/target_vol/root/home: no mount point specified.
+umount: /mnt/target_vol/root/var: no mount point specified.
+umount: /mnt/target_vol/root/tmp: no mount point specified.
+umount: /mnt/target_vol/root/: no mount point specified.
+```
+- In aws console, detach the target volume from rescue instance and attach it to the source instance (as the root volume)
 
 **LVM setup**
 ---------------------
@@ -357,6 +368,48 @@ Need to move target_vol/home/, var, and tmp into target_vol/root/
   mount /dev/vg0/vg0_var /mnt/target_vol/root/var/
   mount /dev/vg0/vg0_tmp /mnt/target_vol/root/tmp/
   ```
+
+Install GRUB on the new volume “target_vol” (Idk waht is happening)
+```
+for m in dev proc run sys; do mount -o bind {,/mnt/target_vol/root}/$m; done
+
+chroot /mnt/target_vol/root
+```
+- Move old grub config `mv /boot/grub/grub.cfg /boot/grub/grub.cfg.org`
+- Install grub boot loader in target_vol `grub-install /dev/xvdb`
+- Regenerate GRUB config file: `grub-mkconfig -o /boot/grub/grub.cfg`
+
+
+Edit “/etc/fstab” file and set new partitions
+- Backup old file: `cp /etc/fstab /etc/fstab.org`
+- Add the new partitions to the/etc/fstab file based on the UUIDs given by the lsblk -f output
+
+```
+# relevant parts
+
+xvdb
+├─xvdb1
+├─xvdb2
+└─xvdb3 LVM2_m LVM2        1VXHOu-keNU-pXQi-nTZW-wu0r-WmaQ-c2SbiZ
+  ├─vg0-vg0_swap
+  │
+  ├─vg0-vg0_root
+  │     ext4   1.0         50508921-02c8-4be7-a064-436b236ce21c        1G    41% /
+  ├─vg0-vg0_home
+  │     ext4   1.0         ea6eb147-bb56-4e28-866f-50256a3593f8      2.7G     0% /home
+  ├─vg0-vg0_var
+  │     ext4   1.0         ef263ae8-1fe0-4a1c-b219-4d0d49c7809a      1.8G     1% /var
+  └─vg0-vg0_tmp
+        ext4   1.0         8582e29e-39db-41a1-b3b5-cf444eeb39a6      1.8G     0% /tmp
+```
+```
+# /etc/fstab
+
+UUID=50508921-02c8-4be7-a064-436b236ce21c /  ext4   defaults 0  0
+UUID=ea6eb147-bb56-4e28-866f-50256a3593f8 /home ext4 defaults 0 0
+UUID=ef263ae8-1fe0-4a1c-b219-4d0d49c7809a /var ext4 defaults 0 0
+UUID=582e29e-39db-41a1-b3b5-cf444eeb39a6 /tmp ext4 defaults 0 0
+```
 
 ***Extra***
 ---------------------

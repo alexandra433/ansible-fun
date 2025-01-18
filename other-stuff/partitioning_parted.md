@@ -402,7 +402,7 @@ chroot /mnt/target_vol/root
 
 Edit “/etc/fstab” file and set new partitions
 - Backup old file: `cp /etc/fstab /etc/fstab.org`
-- Add the new partitions to the/etc/fstab file based on the UUIDs given by the lsblk -foutput
+- Add the new partitions to the/etc/fstab file based on the UUIDs given by the lsblk -f output
 ```
 root@ip-172-31-91-245:/# lsblk -f
 NAME     FSTYPE FSVER LABEL UUID                                 FSAVAIL FSUSE% MOUNTPOINTS
