@@ -6,10 +6,10 @@
       name: python3-pexpect
       update_cache: yes
     when: ansible_distribution == "Debian"
-  - name: Download pexpect (Debian)
+  - name: Download pexpect (RedHat)
     dnf:
       name: python3-pexpect
-    when: ansible_distribution == "Redhat"
+    when: ansible_distribution == "RedHat"
   become: true
   become_user: root
 
