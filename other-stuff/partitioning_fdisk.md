@@ -10,7 +10,6 @@ Going to create 3 partitions (https://www.reddit.com/r/debian/comments/16lckno/l
     - Logical vol: vg0/home
     - logical vol: vg0/tmp
 
-
 - https://medium.com/@ahmedmansouri/a-guide-to-partitioning-the-ebs-root-volume-on-your-linux-ec2-instance-6db838218e36
 - Stop the instance (source instance)
 - Detach the root volume of the source instance (source_vol)

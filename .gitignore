@@ -166,3 +166,5 @@ terraform.rc
 secrets.txt
 secrets.pass
 .vault_pass
+
+docker/a4l_demo/
