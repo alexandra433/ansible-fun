@@ -3,3 +3,8 @@
   hosts: "{{ survey_target }}"
   roles:
     - test_simple_expect
+
+# perl version:
+# ansible-playbook test_simple_expect.yml --extra-vars "survey_target=rh_server1" -v
+# ansible builtin expect version:
+# ansible-playbook test_simple_expect.yml --extra-vars "survey_target=rh_server1 expect_ver=ansible" -v

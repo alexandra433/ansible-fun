@@ -1,11 +1,18 @@
 ---
 - name: Download pexpect
-  apt:
-    name: python3-pexpect
-    update_cache: yes
+  block:
+  - name: Download pexpect (Debian)
+    apt:
+      name: python3-pexpect
+      update_cache: yes
+    when: ansible_distribution == "Debian"
+  - name: Download pexpect (Debian)
+    dnf:
+      name: python3-pexpect
+    when: ansible_distribution == "Redhat"
   become: true
   become_user: root
-  when: ansible_distribution == "Debian"
+
 
 - name: Run the bash script and provide responses
   expect:
