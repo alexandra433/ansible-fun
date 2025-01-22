@@ -1,11 +1,18 @@
 ---
-- name: Download perl expect.pm
+- name: Download perl expect.pm (Debian)
   apt:
     name: libexpect-perl
     update_cache: yes
   become: true
   become_user: root
   when: ansible_distribution == "Debian"
+
+- name: Download perl (Redhat)
+  dnf:
+    name: perl
+  become: true
+  become_user: root
+  when: ansible_distribution == "RedHat"
 
 - name: Template in simple_expect perl script
   template:
