@@ -7,7 +7,10 @@ resource "aws_instance" "ansible_server" {
   tags = {
     Name = "ansible_server_tf"
   }
-  user_data = file("./random_modules/test_expect_servers/user_data/ansible_setup.sh")
+  # user_data = file("./random_modules/test_expect_servers/user_data/ansible_setup.sh")
+  user_data = base64encode(templatefile("./random_modules/test_expect_servers/user_data/ansible_setup.sh", {
+    vault_pass = var.vault_pass
+  }))
 }
 
 resource "aws_instance" "deb_server1" {
@@ -19,6 +22,12 @@ resource "aws_instance" "deb_server1" {
   tags = {
     Name = "deb_server1_tf"
   }
+  user_data = base64encode(templatefile("./random_modules/test_expect_servers/user_data/host_setup.sh", {
+    ansible_usr_pass = var.ansible_usr_pass
+    default_aws_usr = var.host_config_map["debian"].default_aws_usr
+    sudo_group = var.host_config_map["debian"].sudo_group
+    ssh_service = var.host_config_map["debian"].ssh_service
+  }))
 }
 
 resource "aws_instance" "deb_server2" {
@@ -30,6 +39,13 @@ resource "aws_instance" "deb_server2" {
   tags = {
     Name = "deb_server2_tf"
   }
+
+  user_data = base64encode(templatefile("./random_modules/test_expect_servers/user_data/host_setup.sh", {
+    ansible_usr_pass = var.ansible_usr_pass
+    default_aws_usr = var.host_config_map["debian"].default_aws_usr
+    sudo_group = var.host_config_map["debian"].sudo_group
+    ssh_service = var.host_config_map["debian"].ssh_service
+  }))
 }
 
 resource "aws_instance" "rh_server1" {
@@ -41,6 +57,13 @@ resource "aws_instance" "rh_server1" {
   tags = {
     Name = "rh_server1_tf"
   }
+
+  user_data = base64encode(templatefile("./random_modules/test_expect_servers/user_data/host_setup.sh", {
+    ansible_usr_pass = var.ansible_usr_pass
+    default_aws_usr = var.host_config_map["redhat"].default_aws_usr
+    sudo_group = var.host_config_map["redhat"].sudo_group
+    ssh_service = var.host_config_map["redhat"].ssh_service
+  }))
 }
 
 resource "aws_instance" "rh_server2" {
@@ -52,6 +75,13 @@ resource "aws_instance" "rh_server2" {
   tags = {
     Name = "rh_server2_tf"
   }
+
+  user_data = base64encode(templatefile("./random_modules/test_expect_servers/user_data/host_setup.sh", {
+    ansible_usr_pass = var.ansible_usr_pass
+    default_aws_usr = var.host_config_map["redhat"].default_aws_usr
+    sudo_group = var.host_config_map["redhat"].sudo_group
+    ssh_service = var.host_config_map["redhat"].ssh_service
+  }))
 }
 
 resource "aws_security_group" "allow_ssh" {

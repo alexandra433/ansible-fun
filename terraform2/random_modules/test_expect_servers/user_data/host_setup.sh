@@ -9,13 +9,14 @@
 sudo useradd -p $(openssl passwd -1 ${ansible_usr_pass}) -m ansible_usr
 # 2. Give ansible_usr ssh access
 echo "" >> /etc/ssh/sshd_config
-echo "AllowUsers admin ansible_usr" >> /etc/ssh/sshd_config
+echo "AllowUsers ${default_aws_usr} ansible_usr" >> /etc/ssh/sshd_config
 echo "" >> /etc/ssh/sshd_config
 echo "Match User ansible_usr" >> /etc/ssh/sshd_config
 echo "  PasswordAuthentication yes" >> /etc/ssh/sshd_config
 # 3. Make ansible_usr sudoer without password? (Maybe not)
 # 3. Make ansible_usr a sudoer
-adduser ansible_usr sudo
+usermod -a -G ${sudo_group} ansible_usr
 # 4. Restart ssh
-systemctl restart ssh
+systemctl restart ${ssh_service}
 # 5. Download perl expect module, pexpect, ...?
+# 6. Add the ll alias?
