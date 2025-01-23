@@ -7,6 +7,7 @@ resource "aws_instance" "ansible_server" {
   tags = {
     Name = "ansible_server_tf"
   }
+  user_data = file("./random_modules/test_expect_servers/user_data/ansible_setup.sh")
 }
 
 resource "aws_instance" "deb_server1" {
