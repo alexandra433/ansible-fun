@@ -1,3 +1,5 @@
+Does not work yet. Might need instance with more resources
+
 **Provision instance**
 -----------------------------------
 Launched a t2.medium with redhat ami. Allow ssh, https, http traffic from anywhere

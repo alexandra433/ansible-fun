@@ -1,5 +1,13 @@
 #!/usr/bin/perl
 
+# Date: Dec 2024
+# This script generates an new ssh key ~/.ssh/id_rsa (overwriting an previous ones),
+# then installs it on a specified server, granting access to that server without a password
+# Parameters:
+# - $remotehost: IP address or FQDN of the server to copy the ssh key to
+# - $remoteuser: The user we want to use to log into the server
+# - $remoteuserpwd: The password of $remoteuser
+#
 # referenced stuff
 # https://www.perlmonks.org/?node_id=786670
 # https://metacpan.org/release/RGIERSIG/Expect-1.15/view/Expect.pod

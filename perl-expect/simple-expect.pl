@@ -1,5 +1,12 @@
 #!/usr/bin/perl
 
+# Date: Dec 2024
+# This script provides responses to the prompts in the read-input.sh script
+# Created to practice using the perl expect module
+# Parameters:
+# - $favepie
+# - $filename
+#
 # referenced stuff
 # https://www.perlmonks.org/?node_id=786670
 # https://metacpan.org/release/RGIERSIG/Expect-1.15/view/Expect.pod
