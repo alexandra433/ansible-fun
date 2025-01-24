@@ -93,7 +93,7 @@ Create ansible_usr on remote servers (server 1 and 2)
 -------------------------
 - On ansible server, cd to git repo: `cd ansible-fun`
 - Ping the hosts first
-  - `ansible all -m ping -i inventory.ini`
+  - `ansible all -m ping --extra-vars "ansible_ssh_pass="`
     - You'll see something like this. It is fine
     ```
     The authenticity of host '54.161.212.65 (54.161.212.65)' can't be established.
@@ -112,12 +112,13 @@ Create ansible_usr on remote servers (server 1 and 2)
 - Created testuser on server1
   - `ansible-playbook create_ssh_user.yml --extra-vars "survey_target=deb_server1" -v`
 - Run the generate_ssh_key script on server2
-  - `ansible-playbook keygen_and_scp.yml --extra-vars "survey_target=deb_server2 scp_host=ec2-44-211-191-35.compute-1.amazonaws.com scp_user=testuser" -v`
+  - `ansible-playbook keygen_and_scp.yml --extra-vars "survey_target=deb_server2 scp_host=ec2-54-87-38-24.compute-1.amazonaws.com scp_user=testuser" -v`
     - scp_host should be dns of server1
+  - `ansible-playbook keygen_and_scp.yml --extra-vars "survey_target=rh_server2 scp_host=ec2-52-201-236-29.compute-1.amazonaws.com scp_user=testuser expect_ver=ansible" -v`
 
 - To run the simple expect test:
-  - `ansible-playbook test_simple_expect.yml --extra-vars "survey_target=server2" -v`
-  - `ansible-playbook test_simple_expect.yml --extra-vars "survey_target=server2 expect_ver=ansible" -v`
+  - `ansible-playbook test_simple_expect.yml --extra-vars "survey_target=deb_server2" -v`
+  - `ansible-playbook test_simple_expect.yml --extra-vars "survey_target=deb_server2 expect_ver=ansible" -v`
 
 - password change:
   - `ansible-playbook change_ansible_pw.yml --extra-vars "survey_target=deb_server1 new_pass=" -v`

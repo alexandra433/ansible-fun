@@ -3,7 +3,10 @@
   hosts: "{{ survey_target }}"
   vars:
     user_pass: "{{ ssh_user_pass }}"
+    expect_ver: "{{ survey_expect_ver | default("perl")}}"
   roles:
-    - gen_ssh_key_perl
-    #- gen_ssh_key_ansible
-    - test_scp
+    - role: gen_ssh_key_perl
+      when: expect_ver == "perl"
+    - role: gen_ssh_key_ansible
+      when: expect_ver == "ansible"
+    - role: test_scp
