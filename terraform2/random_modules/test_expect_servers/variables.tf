@@ -21,19 +21,19 @@ variable "azlinux_ami_us_east_1" {
 variable "host_config_map" {
   type = map(object({
     default_aws_usr = string
-    sudo_group = string
-    ssh_service = string
+    sudo_group      = string
+    ssh_service     = string
   }))
   default = {
     debian = {
       default_aws_usr = "admin"
-      sudo_group = "sudo"
-      ssh_service = "ssh"
+      sudo_group      = "sudo"
+      ssh_service     = "ssh"
     }
     redhat = {
       default_aws_usr = "ec2-user"
-      sudo_group = "wheel"
-      ssh_service = "sshd"
+      sudo_group      = "wheel"
+      ssh_service     = "sshd"
     }
   }
 }

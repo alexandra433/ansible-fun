@@ -1,10 +1,14 @@
+- Remote storage for terraform state file
+  - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ssm_parameter "The unencrypted value of a SecureString will be stored in the raw state as plain-text"
+- user-data alternatives
 - bash script ver of ssh key generation
+- perl expect on redhat
 - fdisk boot issues
 - Add extra volume to ec2, figure out how to partition and mount with fdisk
   - make script
 - Do something about updating ips and dns names each time
-
-
+- Bootstrap extra stuff (alias setup, package downloads)?
+- Ansible download and set up on Redhat (currently only did it for ubuntu)
 
 Done:
 - Create user, set password, set user expiration in one line
@@ -13,3 +17,6 @@ Done:
   - Added `ansible_become_pass:` variable to inventory
 - ansible_ssh_pass= vs first time pinging hosts
   - Disable sshpass for host key checking when ping inventory first time with `ansible all -m ping --extra-vars "ansible_ssh_pass="`
+- Automate ansible download and creation of ansible users
+  - Used ec2 user-data
+- Incroporate aws ssm
