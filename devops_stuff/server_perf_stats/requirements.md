@@ -32,7 +32,9 @@
       %Cpu(s):  0.0 us,  0.3 sy,  0.0 ni, 99.3 id,  0.0 wa,  0.0 hi,  0.0 si,  0.3 st
       ```
 - Total memory usage (free vs used)
-  - `top -bn2 | grep 'MiB Mem' |top -bn2 | grep 'MiB Mem' | tail -1 | awk '{ printf "Mem usage:"; for (i=4; i<=9; i++) printf " " $i; printf "\n" }'`
+  - `free -m | grep 'Mem' | awk '{ print "Mem usage: " $3 "MB used, " $4 "MB free" }'`
+  - `top` is an option
+    - `top -bn2 | grep 'MiB Mem' |top -bn2 | grep 'MiB Mem' | tail -1 | awk '{ printf "Mem usage:"; for (i=4; i<=9; i++) printf " " $i; printf "\n" }'`
 - Total disk usage (free vs used)
   - `df -h --total | tail -1 | awk '{ print "Disk usage: " $3 " Used, " $4 " Avaliable (" $5 " usage)"}'`
 - Top 5 processes by CPU usage

@@ -3,7 +3,7 @@
 num_cores=$(lscpu | grep '^CPU(s):' | awk '{ print $2}')
 # Running top command several times will slow things down
 cpu_usage=$(top -bn2 | grep '%Cpu' | tail -1 | grep -P '(....|...) id,'| awk  -v n_cores=$num_cores '{print "CPU Usage: " 100-$8/n_cores "%"}')
-mem_usage=$(top -bn2 | grep 'MiB Mem' |top -bn2 | grep 'MiB Mem' | tail -1 | awk '{ printf "Mem usage:"; for (i=4; i<=9; i++) printf " " $i; printf "\n" }')
+mem_usage=$(free -m | grep 'Mem' | awk '{ print "Mem usage: " $3 "MB used, " $4 "MB free" }')
 disk_usage=$(df -h --total | tail -1 | awk '{ print "Disk usage: " $3 " Used, " $4 " Avaliable (" $5 " usage)"}')
 
 arr_stats=($cpu_usage, $mem_usage)
