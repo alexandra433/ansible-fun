@@ -168,3 +168,4 @@ secrets.pass
 .vault_pass
 
 docker/a4l_demo/
+linux-stuff/
