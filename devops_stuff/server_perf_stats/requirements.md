@@ -34,7 +34,7 @@
 - Total memory usage (free vs used)
   - `free -m | grep 'Mem' | awk '{ print "Mem usage: " $3 "MB used, " $4 "MB free" }'`
   - `top` is an option
-    - `top -bn2 | grep 'MiB Mem' |top -bn2 | grep 'MiB Mem' | tail -1 | awk '{ printf "Mem usage:"; for (i=4; i<=9; i++) printf " " $i; printf "\n" }'`
+    - `top -bn2 | grep 'MiB Mem' | tail -1 | awk '{ printf "Mem usage:"; for (i=4; i<=9; i++) printf " " $i; printf "\n" }'`
 - Total disk usage (free vs used)
   - `df -h --total | tail -1 | awk '{ print "Disk usage: " $3 " Used, " $4 " Avaliable (" $5 " usage)"}'`
 - Top 5 processes by CPU usage
@@ -61,10 +61,14 @@
   - `w`, `who`, and `users` are all possible commands to use
 - failed login attempts
   - `/var/log/auth.log` in Ubuntu systems, `/var/log/secure` in Redhat
-- print the each group in the output of the `groups` command on its own line
-  - `groups | awk '{ print $USER " is part of the following groups"; for (i = 1; i <= NF; i++) {print $i} }'`
+  - For failed password:
+    - `grep -c 'Failed password' /var/log/secure`
+    -
+- print each group in the output of the `groups` command on its own line
+  - `groups $target_user | sed -e "s/$target_user ://" | awk -v target_user=$target_user '{ print target_user " is part of the following groups:"; for (i = 1; i <= NF; i++) {print $i} }'`
 - Save output of script to a file
 
 **Stuff**
 - https://stackoverflow.com/questions/17066250/create-timestamp-variable-in-bash-script
 - https://www.atlantic.net/vps-hosting/find-top-10-running-processes-by-memory-and-cpu-usage/
+- 5213test

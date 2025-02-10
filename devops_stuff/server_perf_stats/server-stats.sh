@@ -6,36 +6,55 @@ cpu_usage=$(top -bn2 | grep '%Cpu' | tail -1 | grep -P '(....|...) id,'| awk  -v
 mem_usage=$(free -m | grep 'Mem' | awk '{ print "Mem usage: " $3 "MB used, " $4 "MB free" }')
 disk_usage=$(df -h --total | tail -1 | awk '{ print "Disk usage: " $3 " Used, " $4 " Avaliable (" $5 " usage)"}')
 
-arr_stats=($cpu_usage, $mem_usage)
-
 timestamp=$(date +%F_%H:%M)
+echo
 echo "--------------------------------------------------"
 echo "Current Server Performance Stats at $timestamp"
 echo "--------------------------------------------------"
 echo
 echo "Basic Stats"
 echo "---------------"
+# arr_stats=($cpu_usage, $mem_usage)
 # for i in "${arr_stats[@]}"; do echo $i; done
 echo "$cpu_usage"
 echo "$mem_usage"
 echo "$disk_usage"
 echo "Top 5 processes by CPU usage"
 echo "--------------------------------"
-ps aux --sort -%cpu | head -n 5
+echo | ps aux --sort -%cpu | head -n 5
 echo
 echo "Top 5 processes by memory usage"
 echo "--------------------------------"
-ps aux --sort -%mem | head -n 5
+echo | ps aux --sort -%mem | head -n 5
 echo
 
+echo "-------------------------------"
 echo "Bonus things!!"
 echo "-------------------------------"
-grep PRETTY_NAME /etc/os-release | sed -e 's/PRETTY_NAME=//' | awk '{ print "OS version: " $0 }'
-uptime -p | awk '{print "Server uptime: " $0 }'
-uptime | awk -F'load average: ' '{print "Load average: " $2}'
-users | awk '{ print "Logged in users: " $0 }'
+echo | grep PRETTY_NAME /etc/os-release | sed -e 's/PRETTY_NAME=//' | awk '{ print "OS version: " $0 }'
+echo | uptime -p | awk '{print "Server uptime: " $0 }'
+echo | uptime | awk -F'load average: ' '{print "Load average: " $2}'
+echo | users | awk '{ print "Logged in users: " $0 }'
+logins_redhat=/var/log/secure
+logins_ubuntu=/var/log/auth.log
+if [[ -f $logins_redhat ]];
+then
+  echo | grep -c 'Failed password' $logins_redhat | awk '{print "There have been " $1 " failed login(s) so far" }'
+elif [[ -f $logins_ubuntu ]];
+then
+  echo | grep -c 'Failed password' $logins_ubuntu | awk '{print "There have been " $1 " failed login(s) so far" }'
+fi
 echo
 
 echo "Extra Bonus things to print"
 echo "-------------------------------"
-groups | awk '{ print $USER " is part of the following groups:"; for (i = 1; i <= NF; i++) {print $i} }'
+arr_users=($USER "testuser" "testuser2")
+for i in "${arr_users[@]}"
+  do
+    if id $i >/dev/null 2>&1;
+    then
+      target_user=$i
+      echo | groups $target_user | sed -e "s/$target_user ://" | awk -v target_user=$target_user '{ print target_user " is part of the following groups:"; for (i = 1; i <= NF; i++) {print $i} }'
+      echo
+    fi
+done
