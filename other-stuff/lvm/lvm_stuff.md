@@ -812,3 +812,266 @@ tmpfs                         5.0M     0  5.0M   0% /run/lock
 tmpfs                          98M     0   98M   0% /run/user/1000
 root@ip-172-31-94-19:~#
 ```
+
+Just creating a new partition
+-------------------------------
+Added another 1 GB to the volume (9GB -> 10 GB)
+
+
+After adding
+```
+Disk /dev/xvda: 8 GiB, 8589934592 bytes, 16777216 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disklabel type: gpt
+Disk identifier: 3E30AB38-DA4A-9343-A909-646A2B454ADB
+
+Device       Start      End  Sectors  Size Type
+/dev/xvda1  262144 16775167 16513024  7.9G Linux root (x86-64)
+/dev/xvda14   2048     8191     6144    3M BIOS boot
+/dev/xvda15   8192   262143   253952  124M EFI System
+
+Partition table entries are not in disk order.
+GPT PMBR size mismatch (18874367 != 20971519) will be corrected by write.
+The backup GPT table is not on the end of the device.
+
+
+Disk /dev/xvdb: 10 GiB, 10737418240 bytes, 20971520 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disklabel type: gpt
+Disk identifier: F31C352D-7E8A-0745-9CC0-C9613E28DCCB
+
+Device       Start      End  Sectors  Size Type
+/dev/xvdb1    2048  1026047  1024000  500M Linux filesystem
+/dev/xvdb2 1026048  2050047  1024000  500M Linux filesystem
+/dev/xvdb3 2050048  8341503  6291456    3G Linux LVM
+/dev/xvdb4 8341504 18872319 10530816    5G Linux LVM
+
+
+Disk /dev/mapper/vg01-lvm_var: 2 GiB, 2147483648 bytes, 4194304 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+
+
+Disk /dev/mapper/vg01-lvm_var_log: 3 GiB, 3221225472 bytes, 6291456 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+
+
+Disk /dev/mapper/vg01-lvm_home: 3 GiB, 3221225472 bytes, 6291456 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+
+
+Disk /dev/mapper/vg01-lvm_tmp: 16 MiB, 16777216 bytes, 32768 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+```
+
+Just doing a pvresize (won't work)
+
+```
+root@ip-172-31-94-19:~# pvscan
+  PV /dev/xvdb3   VG vg01            lvm2 [<3.00 GiB / 0    free]
+  PV /dev/xvdb4   VG vg01            lvm2 [<5.02 GiB / 0    free]
+  Total: 2 [<8.02 GiB] / in use: 2 [<8.02 GiB] / in no VG: 0 [0   ]
+root@ip-172-31-94-19:~# pvresize /dev/xvdb4
+  Physical volume "/dev/xvdb4" changed
+  1 physical volume(s) resized or updated / 0 physical volume(s) not resized
+root@ip-172-31-94-19:~# pvscan
+  PV /dev/xvdb3   VG vg01            lvm2 [<3.00 GiB / 0    free]
+  PV /dev/xvdb4   VG vg01            lvm2 [<5.02 GiB / 0    free]
+  Total: 2 [<8.02 GiB] / in use: 2 [<8.02 GiB] / in no VG: 0 [0   ]
+```
+
+Creating a new (5th) partition
+```
+root@ip-172-31-94-19:~# fdisk /dev/xvdb
+
+Welcome to fdisk (util-linux 2.38.1).
+Changes will remain in memory only, until you decide to write them.
+Be careful before using the write command.
+
+GPT PMBR size mismatch (18874367 != 20971519) will be corrected by write.
+The backup GPT table is not on the end of the device. This problem will be corrected by write.
+This disk is currently in use - repartitioning is probably a bad idea.
+It's recommended to umount all file systems, and swapoff all swap
+partitions on this disk.
+
+
+Command (m for help): n
+Partition number (5-128, default 5):
+First sector (18872320-20971486, default 18872320):
+Last sector, +/-sectors or +/-size{K,M,G,T,P} (18872320-20971486, default 20969471):
+
+Created a new partition 5 of type 'Linux filesystem' and of size 1 GiB.
+
+Command (m for help): t
+Partition number (1-5, default 5): 5
+Partition type or alias (type L to list all): 43
+
+Changed type of partition 'Linux filesystem' to 'Linux LVM'.
+
+Command (m for help): w
+The partition table has been altered.
+Syncing disks.
+```
+
+`fdisk -l` after resize
+```
+root@ip-172-31-94-19:~# fdisk -l
+Disk /dev/xvda: 8 GiB, 8589934592 bytes, 16777216 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disklabel type: gpt
+Disk identifier: 3E30AB38-DA4A-9343-A909-646A2B454ADB
+
+Device       Start      End  Sectors  Size Type
+/dev/xvda1  262144 16775167 16513024  7.9G Linux root (x86-64)
+/dev/xvda14   2048     8191     6144    3M BIOS boot
+/dev/xvda15   8192   262143   253952  124M EFI System
+
+Partition table entries are not in disk order.
+
+
+Disk /dev/xvdb: 10 GiB, 10737418240 bytes, 20971520 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disklabel type: gpt
+Disk identifier: F31C352D-7E8A-0745-9CC0-C9613E28DCCB
+
+Device        Start      End  Sectors  Size Type
+/dev/xvdb1     2048  1026047  1024000  500M Linux filesystem
+/dev/xvdb2  1026048  2050047  1024000  500M Linux filesystem
+/dev/xvdb3  2050048  8341503  6291456    3G Linux LVM
+/dev/xvdb4  8341504 18872319 10530816    5G Linux LVM
+/dev/xvdb5 18872320 20969471  2097152    1G Linux LVM
+
+
+Disk /dev/mapper/vg01-lvm_var: 2 GiB, 2147483648 bytes, 4194304 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+
+
+Disk /dev/mapper/vg01-lvm_var_log: 3 GiB, 3221225472 bytes, 6291456 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+
+
+Disk /dev/mapper/vg01-lvm_home: 3 GiB, 3221225472 bytes, 6291456 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+
+
+Disk /dev/mapper/vg01-lvm_tmp: 16 MiB, 16777216 bytes, 32768 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+```
+
+Adding extra space to logical volumes
+-----------------------------
+- Create physical volume first: `pvcreate /dev/xvdb5`
+- Add to existing volume group (vg01): `vgextend vg01 /dev/xvdb5`
+- Expand logical volumes:
+  - `lvextend -r -L +500M /dev/mapper/vg01-lvm_var_log /dev/xvdb5`
+  - `lvextend -r -L +500M /dev/mapper/vg01-lvm_tmp`
+
+```
+root@ip-172-31-94-19:~# lsblk
+NAME                 MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+xvda                 202:0    0    8G  0 disk
+├─xvda1              202:1    0  7.9G  0 part /
+├─xvda14             202:14   0    3M  0 part
+└─xvda15             202:15   0  124M  0 part /boot/efi
+xvdb                 202:16   0   10G  0 disk
+├─xvdb1              202:17   0  500M  0 part
+├─xvdb2              202:18   0  500M  0 part
+├─xvdb3              202:19   0    3G  0 part
+│ ├─vg01-lvm_var     254:0    0    2G  0 lvm  /mnt/var
+│ ├─vg01-lvm_home    254:2    0    3G  0 lvm  /mnt/home
+│ └─vg01-lvm_tmp     254:3    0   16M  0 lvm  /mnt/tmp
+├─xvdb4              202:20   0    5G  0 part
+│ ├─vg01-lvm_var_log 254:1    0    3G  0 lvm  /mnt/var/log
+│ └─vg01-lvm_home    254:2    0    3G  0 lvm  /mnt/home
+└─xvdb5              202:21   0    1G  0 part
+root@ip-172-31-94-19:~# pvcreate /dev/xvdb5
+  Physical volume "/dev/xvdb5" successfully created.
+root@ip-172-31-94-19:~# vgextend vg01 /dev/xvdb5
+  Volume group "vg01" successfully extended
+root@ip-172-31-94-19:~# df -h
+Filesystem                    Size  Used Avail Use% Mounted on
+udev                          473M     0  473M   0% /dev
+tmpfs                          98M  556K   97M   1% /run
+/dev/xvda1                    7.7G  1.1G  6.3G  15% /
+tmpfs                         486M     0  486M   0% /dev/shm
+tmpfs                         5.0M     0  5.0M   0% /run/lock
+/dev/xvda15                   124M   12M  113M  10% /boot/efi
+/dev/mapper/vg01-lvm_home     2.9G   48K  2.8G   1% /mnt/home
+/dev/mapper/vg01-lvm_tmp       14M   30K   13M   1% /mnt/tmp
+/dev/mapper/vg01-lvm_var      2.0G  232M  1.6G  13% /mnt/var
+/dev/mapper/vg01-lvm_var_log  2.9G   50M  2.7G   2% /mnt/var/log
+tmpfs                          98M     0   98M   0% /run/user/1000
+root@ip-172-31-94-19:~# lvextend -r -L +500M /dev/mapper/vg01-lvm_var_log /dev/xvdb5
+  Size of logical volume vg01/lvm_var_log changed from 3.00 GiB (768 extents) to <3.49 GiB (893 extents).
+  Logical volume vg01/lvm_var_log successfully resized.
+resize2fs 1.47.0 (5-Feb-2023)
+Filesystem at /dev/mapper/vg01-lvm_var_log is mounted on /mnt/var/log; on-line resizing required
+old_desc_blocks = 1, new_desc_blocks = 1
+The filesystem on /dev/mapper/vg01-lvm_var_log is now 914432 (4k) blocks long.
+
+root@ip-172-31-94-19:~# lvextned -r -L +500M /dev/mapper/vg01-lvm_tmp
+-bash: lvextned: command not found
+root@ip-172-31-94-19:~# lvextend -r -L +500M /dev/mapper/vg01-lvm_tmp
+  Size of logical volume vg01/lvm_tmp changed from 16.00 MiB (4 extents) to 516.00 MiB (129 extents).
+  Logical volume vg01/lvm_tmp successfully resized.
+resize2fs 1.47.0 (5-Feb-2023)
+Filesystem at /dev/mapper/vg01-lvm_tmp is mounted on /mnt/tmp; on-line resizing required
+old_desc_blocks = 1, new_desc_blocks = 5
+The filesystem on /dev/mapper/vg01-lvm_tmp is now 528384 (1k) blocks long.
+
+root@ip-172-31-94-19:~# df -h
+Filesystem                    Size  Used Avail Use% Mounted on
+udev                          473M     0  473M   0% /dev
+tmpfs                          98M  556K   97M   1% /run
+/dev/xvda1                    7.7G  1.1G  6.3G  15% /
+tmpfs                         486M     0  486M   0% /dev/shm
+tmpfs                         5.0M     0  5.0M   0% /run/lock
+/dev/xvda15                   124M   12M  113M  10% /boot/efi
+/dev/mapper/vg01-lvm_home     2.9G   48K  2.8G   1% /mnt/home
+/dev/mapper/vg01-lvm_tmp      482M   30K  461M   1% /mnt/tmp
+/dev/mapper/vg01-lvm_var      2.0G  232M  1.6G  13% /mnt/var
+/dev/mapper/vg01-lvm_var_log  3.4G   50M  3.2G   2% /mnt/var/log
+tmpfs                          98M     0   98M   0% /run/user/1000
+root@ip-172-31-94-19:~# lsblk
+NAME                 MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+xvda                 202:0    0    8G  0 disk
+├─xvda1              202:1    0  7.9G  0 part /
+├─xvda14             202:14   0    3M  0 part
+└─xvda15             202:15   0  124M  0 part /boot/efi
+xvdb                 202:16   0   10G  0 disk
+├─xvdb1              202:17   0  500M  0 part
+├─xvdb2              202:18   0  500M  0 part
+├─xvdb3              202:19   0    3G  0 part
+│ ├─vg01-lvm_var     254:0    0    2G  0 lvm  /mnt/var
+│ ├─vg01-lvm_home    254:2    0    3G  0 lvm  /mnt/home
+│ └─vg01-lvm_tmp     254:3    0  516M  0 lvm  /mnt/tmp
+├─xvdb4              202:20   0    5G  0 part
+│ ├─vg01-lvm_var_log 254:1    0  3.5G  0 lvm  /mnt/var/log
+│ └─vg01-lvm_home    254:2    0    3G  0 lvm  /mnt/home
+└─xvdb5              202:21   0    1G  0 part
+  ├─vg01-lvm_var_log 254:1    0  3.5G  0 lvm  /mnt/var/log
+  └─vg01-lvm_tmp     254:3    0  516M  0 lvm  /mnt/tmp
+```
