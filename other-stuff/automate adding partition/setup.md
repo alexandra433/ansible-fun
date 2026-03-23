@@ -133,3 +133,37 @@ Create ansible_usr on remote servers (server 1 and 2)
     ```
 
 ansible-playbook test_partition.yml --extra-vars "survey_target=deb_server1" -v
+
+```
+root@ip-172-31-16-201:~/ansible-fun# ansible-playbook test_partition.yml --extra-vars "survey_target=deb_server1, ansible_usr_pass=<redacted>" -v
+Using /root/ansible-fun/ansible.cfg as config file
+
+PLAY [Test a simple use case of the expect module] ********************************************************
+
+TASK [Gathering Facts] ************************************************************************************
+[WARNING]: Host '18.216.157.58' is using the discovered Python interpreter at '/usr/bin/python3.13', but future installation of another Python interpreter could cause a different interpreter to be discovered. See https://docs.ansible.com/ansible-core/2.20/reference_appendices/interpreter_discovery.html for more information.
+ok: [18.216.157.58]
+
+TASK [add_partition : Get partiton info] ******************************************************************
+changed: [18.216.157.58] => {"changed": true, "cmd": "/usr/sbin/fdisk -l | grep /dev/xvda2", "delta": "0:00:00.006112", "end": "2026-03-23 21:01:50.851462", "failed_when_result": false, "failed_when_suppressed_exception": "(traceback unavailable)", "msg": "non-zero return code", "rc": 1, "start": "2026-03-23 21:01:50.845350", "stderr": "GPT PMBR size mismatch (16777215 != 20971519) will be corrected by write.\nThe backup GPT table is not on the end of the device.", "stderr_lines": ["GPT PMBR size mismatch (16777215 != 20971519) will be corrected by write.", "The backup GPT table is not on the end of the device."], "stdout": "", "stdout_lines": []}
+
+TASK [add_partition : check putput] ***********************************************************************
+ok: [18.216.157.58] => {
+    "changed": false,
+    "msg": "All assertions passed"
+}
+
+TASK [add_partition : Run fdisk command.] *****************************************************************
+[ERROR]: Task failed: Action failed.
+Origin: /root/ansible-fun/roles/add_partition/tasks/main.yml:35:3
+
+33   become_user: root
+34
+35 - name: Run fdisk command.
+     ^ column 3
+
+fatal: [18.216.157.58]: FAILED! => {"changed": true, "cmd": "echo -e \"n\\n2\\n\\n\\nt\\n2\\n44\\nw\" | /usr/sbin/fdisk /dev/xvda", "delta": "0:00:00.051070", "end": "2026-03-23 21:01:51.343724", "failed_when_result": true, "msg": "", "rc": 0, "start": "2026-03-23 21:01:51.292654", "stderr": "GPT PMBR size mismatch (16777215 != 20971519) will be corrected by write.\nThe backup GPT table is not on the end of the device. This problem will be corrected by write.\nThis disk is currently in use - repartitioning is probably a bad idea.\nIt's recommended to umount all file systems, and swapoff all swap\npartitions on this disk.\n\n-: unknown command\n2: unknown command\n\n\nPartition 2 does not exist yet!\n4: unknown command", "stderr_lines": ["GPT PMBR size mismatch (16777215 != 20971519) will be corrected by write.", "The backup GPT table is not on the end of the device. This problem will be corrected by write.", "This disk is currently in use - repartitioning is probably a bad idea.", "It's recommended to umount all file systems, and swapoff all swap", "partitions on this disk.", "", "-: unknown command", "2: unknown command", "", "", "Partition 2 does not exist yet!", "4: unknown command"], "stdout": "\nWelcome to fdisk (util-linux 2.41).\nChanges will remain in memory only, until you decide to write them.\nBe careful before using the write command.\n\n\nCommand (m for help): \nCommand (m for help): \nCommand (m for help): \nCommand (m for help): \nCommand (m for help): Partition number (1,14,15, default 15): \nCommand (m for help): \nCommand (m for help): \nThe partition table has been altered.\nSyncing disks.", "stdout_lines": ["", "Welcome to fdisk (util-linux 2.41).", "Changes will remain in memory only, until you decide to write them.", "Be careful before using the write command.", "", "", "Command (m for help): ", "Command (m for help): ", "Command (m for help): ", "Command (m for help): ", "Command (m for help): Partition number (1,14,15, default 15): ", "Command (m for help): ", "Command (m for help): ", "The partition table has been altered.", "Syncing disks."]}
+
+PLAY RECAP ************************************************************************************************
+18.216.157.58              : ok=3    changed=1    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0
+```
