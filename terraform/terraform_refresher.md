@@ -1,3 +1,5 @@
+- Download terraform: https://developer.hashicorp.com/terraform/install 
+
 Terraform was already downloaded and aws configure (iamadmin-general for SAA cert practice)
  - check aws configuration with `aws configure list`
 

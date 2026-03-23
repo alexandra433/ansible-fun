@@ -1,0 +1,46 @@
+---
+
+# (echo n; echo p; echo 1; echo 1; echo 200; echo w) | fdisk /dev/sdc
+
+  # n # new partition
+  # 2 # partion number 2
+  #   # default, start immediately after preceding partition
+  #   # default, extend partition to end of disk
+  # t # change partition type
+  # 1 # bootable partition is partition 1 -- /dev/sda1
+  # p # print the in-memory partition table
+  # w # write the partition table
+  # q # and we're done
+
+# (echo n; echo 2; echo; echo; echo t; echo 2; echo 44; echo w) | fdisk /dev/xvda
+
+echo -e "n\n2\n\n\nw" | fdisk /dev/xvda
+
+echo -e "t\n2\n44\nw" | fdisk /dev/xvda
+
+
+echo -e "n\n2\n\n\nt\n2\n44\nw" | fdisk /dev/xvda
+
+# root@ip-172-31-26-56:~# (echo n; echo 2; echo; echo; echo t; echo 2; echo 44; echo w) | fdisk /dev/xvda
+
+# Welcome to fdisk (util-linux 2.41).
+# Changes will remain in memory only, until you decide to write them.
+# Be careful before using the write command.
+
+# GPT PMBR size mismatch (16777215 != 20971519) will be corrected by write.
+# The backup GPT table is not on the end of the device. This problem will be corrected by write.
+# This disk is currently in use - repartitioning is probably a bad idea.
+# It's recommended to umount all file systems, and swapoff all swap
+# partitions on this disk.
+
+
+# Command (m for help): Partition number (2-13,16-128, default 2): First sector (16775168-20971486, default 16775168): Last sector, +/-sectors or +/-size{K,M,G,T,P} (16775168-20971486, default 20969471):
+# Created a new partition 2 of type 'Linux filesystem' and of size 2 GiB.
+
+# Command (m for help): Partition number (1,2,14,15, default 15): Partition type or alias (type L to list all):
+# Changed type of partition 'Linux filesystem' to 'Linux LVM'.
+
+# Command (m for help): The partition table has been altered.
+# Syncing disks.
+
+# root@ip-172-31-26-56:~#
