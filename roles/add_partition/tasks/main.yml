@@ -20,7 +20,7 @@
 # echo -e "t\n2\n44\nw" | fdisk /dev/xvda
 
 - name: Run fdisk command.
-  shell: 'echo -e "n\n2\n\n\nt\n2\n44\nw" | fdisk /dev/xvda'
+  shell: 'echo -e "n\n2\n\n\nt\n2\n44\nw" | /usr/sbin/fdisk /dev/xvda'
   register: partition_output
   failed_when:
     - '"Created a new partition" not in partition_output.stdout'
@@ -29,7 +29,7 @@
 - name: check partition was Created
   block:
     - name: Get partiton info
-      shell: "fdisk -l | grep /dev/xvda2"
+      shell: "/usr/sbin/fdisk -l | grep /dev/xvda2"
       register: verify_output
     - name: check putput
       assert:
