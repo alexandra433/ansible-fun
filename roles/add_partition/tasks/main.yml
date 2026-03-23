@@ -19,27 +19,27 @@
 
 # echo -e "t\n2\n44\nw" | fdisk /dev/xvda
 
-# - name: check partition was does not exist
-#   block:
-#     - name: Get partiton info
-#       shell: "/usr/sbin/fdisk -l | grep /dev/xvda2"
-#       register: verify_output_1
-#       failed_when: verify_output_1.rc > 1
-#     - name: check putput
-#       assert:
-#         that:
-#           - '"/dev/xvda2" not in verify_output_1.stdout'
-#   become: true
-#   become_user: root
+- name: check partition was does not exist
+  block:
+    - name: Get partiton info
+      shell: "/usr/sbin/fdisk -l | grep /dev/xvda2"
+      register: verify_output_1
+      failed_when: verify_output_1.rc > 1
+    - name: check putput
+      assert:
+        that:
+          - '"/dev/xvda2" not in verify_output_1.stdout'
+  become: true
+  become_user: root
           
-# - name: Run fdisk command.
-#   shell: 'printf "n\n2\n\n\nt\n2\n44\nw" | /usr/sbin/fdisk /dev/xvda'
-#   register: partition_output
-#   failed_when:
-#     - '"Created a new partition" not in partition_output.stdout'
-#     - partition_output is not search("Changed type of partition 'Linux filesystem' to 'Linux LVM'")
-#   become: true
-#   become_user: root
+- name: Run fdisk command.
+  shell: 'printf "n\n2\n\n\nt\n2\n44\nw" | /usr/sbin/fdisk /dev/xvda'
+  register: partition_output
+  failed_when:
+    - '"Created a new partition" not in partition_output.stdout'
+    - partition_output is not search("Changed type of partition 'Linux filesystem' to 'Linux LVM'")
+  become: true
+  become_user: root
 
 - name: check partition was Created
   block:
