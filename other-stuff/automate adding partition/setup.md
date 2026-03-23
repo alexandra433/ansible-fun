@@ -132,3 +132,4 @@ Create ansible_usr on remote servers (server 1 and 2)
     }
     ```
 
+ansible-playbook test_simple_expect.yml --extra-vars "survey_target=deb_server2" -v
