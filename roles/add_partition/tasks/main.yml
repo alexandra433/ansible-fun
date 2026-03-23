@@ -14,12 +14,28 @@
 
 # (echo n; echo 2; echo; echo; echo t; echo 2; echo 44; echo w) | fdisk /dev/xvda
 
-echo -e "n\n2\n\n\nw" | fdisk /dev/xvda
 
-echo -e "t\n2\n44\nw" | fdisk /dev/xvda
+# echo -e "n\n2\n\n\nw" | fdisk /dev/xvda
 
+# echo -e "t\n2\n44\nw" | fdisk /dev/xvda
 
-echo -e "n\n2\n\n\nt\n2\n44\nw" | fdisk /dev/xvda
+- name: Run fdisk command.
+  shell: 'echo -e "n\n2\n\n\nt\n2\n44\nw" | fdisk /dev/xvda"'
+  register: partition_output
+  failed_when:
+    - '"Created a new partition" not in partition_output.stdout'
+    - partition_output is not search("Changed type of partition 'Linux filesystem' to 'Linux LVM'")
+
+- name: check partition was Created
+  block:
+    - name: Get partiton info
+      shell: "fdisk -l | grep /dev/xvda2"
+      register: verify_output
+    - name: check putput
+      assert:
+        that:
+          - fdisk_output.stdout != ""
+          - '"Linux LVM" in fdisk_output'
 
 # root@ip-172-31-26-56:~# (echo n; echo 2; echo; echo; echo t; echo 2; echo 44; echo w) | fdisk /dev/xvda
 

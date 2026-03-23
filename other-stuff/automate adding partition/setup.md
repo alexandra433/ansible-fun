@@ -76,6 +76,16 @@ Setup Ansible vault:
     survey_pass: "{{ ssh_user_pass }}"
   ```
 
+```
+ansible_user_pass: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          34313231663434373062623565613462636163363866333536336137626235383237643135363532
+          6434343236653962396230626563386362333163373037300a346531313830313630626437346532
+          39626465313931656235646131393030333661633434643663313838393163376366363531306463
+          6565333534643166340a386361396234383863666331333238353064666331356634666536663732
+          6532
+```
+
 
 **Remote servers setup**
 -------------------------
@@ -105,3 +115,20 @@ Create ansible_usr on remote servers (server 1 and 2)
   - Restart ssh
     - `sudo systemctl restart ssh`for debian
     - `sudo systemctl restart sshd` for redhat
+
+- On ansible server, cd to git repo: `cd ansible-fun`
+- Ping the hosts first
+  - `ansible all -m ping --extra-vars "ansible_ssh_pass="`
+    - You'll see something like this. It is fine
+    ```
+    The authenticity of host '54.161.212.65 (54.161.212.65)' can't be established.
+    ED25519 key fingerprint is SHA256:0htekVOjrKYQx1HcQgzYHSBpk1EPjFQNRXnEsn24jwI.
+    This key is not known by any other names.
+    Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+    54.161.212.65 | UNREACHABLE! => {
+        "changed": false,
+        "msg": "Failed to connect to the host via ssh: Warning: Permanently added '54.161.212.65' (ED25519) to the list of known hosts.\r\nansible_usr@54.161.212.65: Permission denied (publickey,password).",
+        "unreachable": true
+    }
+    ```
+
