@@ -24,7 +24,7 @@
     - name: Get partiton info
       shell: "/usr/sbin/fdisk -l | grep /dev/xvda2"
       register: verify_output_1
-      failed_when: verify_output.rc > 1
+      failed_when: verify_output_1.rc > 1
     - name: check putput
       assert:
         that:
