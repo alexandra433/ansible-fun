@@ -167,3 +167,26 @@ fatal: [18.216.157.58]: FAILED! => {"changed": true, "cmd": "echo -e \"n\\n2\\n\
 PLAY RECAP ************************************************************************************************
 18.216.157.58              : ok=3    changed=1    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0
 ```
+
+```
+PLAY [Test a simple use case of the expect module] ********************************************************
+
+TASK [Gathering Facts] ************************************************************************************
+[WARNING]: Host '18.116.39.64' is using the discovered Python interpreter at '/usr/bin/python3.13', but future installation of another Python interpreter could cause a different interpreter to be discovered. See https://docs.ansible.com/ansible-core/2.20/reference_appendices/interpreter_discovery.html for more information.
+ok: [18.116.39.64]
+
+TASK [add_partition : Get partiton info] ******************************************************************
+changed: [18.116.39.64] => {"changed": true, "cmd": "/usr/sbin/fdisk -l | grep /dev/xvda2", "delta": "0:00:00.007031", "end": "2026-03-23 21:28:15.483789", "failed_when_result": false, "failed_when_suppressed_exception": "(traceback unavailable)", "msg": "non-zero return code", "rc": 1, "start": "2026-03-23 21:28:15.476758", "stderr": "GPT PMBR size mismatch (16777215 != 23068671) will be corrected by write.\nThe backup GPT table is not on the end of the device.", "stderr_lines": ["GPT PMBR size mismatch (16777215 != 23068671) will be corrected by write.", "The backup GPT table is not on the end of the device."], "stdout": "", "stdout_lines": []}
+
+TASK [add_partition : check putput] ***********************************************************************
+ok: [18.116.39.64] => {
+    "changed": false,
+    "msg": "All assertions passed"
+}
+
+TASK [add_partition : Run fdisk command.] *****************************************************************
+changed: [18.116.39.64] => {"changed": true, "cmd": "printf \"n\\n2\\n\\n\\nt\\n2\\n44\\nw\" | /usr/sbin/fdisk /dev/xvda", "delta": "0:00:00.051753", "end": "2026-03-23 21:28:16.005420", "failed_when_result": false, "msg": "", "rc": 0, "start": "2026-03-23 21:28:15.953667", "stderr": "GPT PMBR size mismatch (16777215 != 23068671) will be corrected by write.\nThe backup GPT table is not on the end of the device. This problem will be corrected by write.\nThis disk is currently in use - repartitioning is probably a bad idea.\nIt's recommended to umount all file systems, and swapoff all swap\npartitions on this disk.", "stderr_lines": ["GPT PMBR size mismatch (16777215 != 23068671) will be corrected by write.", "The backup GPT table is not on the end of the device. This problem will be corrected by write.", "This disk is currently in use - repartitioning is probably a bad idea.", "It's recommended to umount all file systems, and swapoff all swap", "partitions on this disk."], "stdout": "\nWelcome to fdisk (util-linux 2.41).\nChanges will remain in memory only, until you decide to write them.\nBe careful before using the write command.\n\n\nCommand (m for help): Partition number (2-13,16-128, default 2): First sector (16775168-23068638, default 16775168): Last sector, +/-sectors or +/-size{K,M,G,T,P} (16775168-23068638, default 23066623): \nCreated a new partition 2 of type 'Linux filesystem' and of size 3 GiB.\n\nCommand (m for help): Partition number (1,2,14,15, default 15): Partition type or alias (type L to list all): \nChanged type of partition 'Linux filesystem' to 'Linux LVM'.\n\nCommand (m for help): The partition table has been altered.\nSyncing disks.", "stdout_lines": ["", "Welcome to fdisk (util-linux 2.41).", "Changes will remain in memory only, until you decide to write them.", "Be careful before using the write command.", "", "", "Command (m for help): Partition number (2-13,16-128, default 2): First sector (16775168-23068638, default 16775168): Last sector, +/-sectors or +/-size{K,M,G,T,P} (16775168-23068638, default 23066623): ", "Created a new partition 2 of type 'Linux filesystem' and of size 3 GiB.", "", "Command (m for help): Partition number (1,2,14,15, default 15): Partition type or alias (type L to list all): ", "Changed type of partition 'Linux filesystem' to 'Linux LVM'.", "", "Command (m for help): The partition table has been altered.", "Syncing disks."]}
+
+TASK [add_partition : Get partiton info] ******************************************************************
+changed: [18.116.39.64] => {"changed": true, "cmd": "/usr/sbin/fdisk -l | grep /dev/xvda2", "delta": "0:00:00.007203", "end": "2026-03-23 21:28:16.498536", "msg": "", "rc": 0, "start": "2026-03-23 21:28:16.491333", "stderr": "", "stderr_lines": [], "stdout": "/dev/xvda2  16775168 23066623  6291456    3G Linux LVM", "stdout_lines": ["/dev/xvda2  16775168 23066623  6291456    3G Linux LVM"]}
+```
