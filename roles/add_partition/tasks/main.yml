@@ -27,7 +27,7 @@
     - name: check putput
       assert:
         that:
-          - verify_output_1.stdout = ""
+          - '"/dev/xvda2" not in verify_output_1.stdout'
   become: true
   become_user: root
           
