@@ -43,8 +43,8 @@
     shell: mkfs -t ext4 /dev/vg01/lv_home
 
   # Note: running umount gives message umount: /var: not mounted. on AWS EC2 Debian 13 
-  - name: mv /home /home.old
-    shell: mv /home /home.old
+  - name: cp /home /home.old
+    shell: cp /home /home.old
   
   - name: mkdir /home
     shell: mkdir /home
