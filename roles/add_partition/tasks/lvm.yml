@@ -3,6 +3,8 @@
   apt:
     name: lvm2
     update_cache: yes
+  become: true
+  become_user: root
 
 - name: set space increase facts
   set_fact:
