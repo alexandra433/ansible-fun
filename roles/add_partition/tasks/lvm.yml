@@ -28,7 +28,7 @@
     shell: "/usr/sbin/lvcreate --name lv_home -L +{{ home_increase }} vg01"
 
   - name: lvcreate --name lv_var -l +100%FREE vg01
-    shell: "/usr/sbin/lvcreate --name lv_var -l +{{ 100%FREE }} vg01"
+    shell: "/usr/sbin/lvcreate --name lv_var -l +{{ var_increase }} vg01"
 
   # - name: install xfsprogs
   #   apt:
