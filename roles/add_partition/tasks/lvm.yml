@@ -1,0 +1,50 @@
+---
+- name: install lvm
+  apt:
+    name: lvm2
+    update_cache: yes
+
+- name: set space increase facts
+  set_fact:
+    home_increase: "500M"
+    var_increase: "100%FREE"
+
+
+- name: pvcreate /dev/xvda2
+  shell: "pvcreate /dev/xvda2"
+
+- name: vgcreate vg01 /dev/xvda2
+  shell: "vgcreate vg01 /dev/xvda2"
+
+# - name: swapoff -a
+#   shell: swapoff -a
+
+# https://medium.com/@yhakimi/lvm-how-to-create-and-extend-a-logical-volume-in-linux-9744f27eacfe
+- name: lvcreate --name lv_home -L +500M vg01
+  shell: "lvcreate --name lv_home -L +{{ home_increase }} vg01"
+
+- name: lvcreate --name lv_var -l +100%FREE vg01
+  shell: "lvcreate --name lv_var -l +{{ 100%FREE }} vg01"
+
+- name: install xfsprogs
+  apt:
+    name: xfsprogs
+
+# *The xfs filesystem is an upgrade from ext4 
+# in many aspects and is the default filesystem with RHEL 
+# servers, that said, there are advantages of using ext4 
+# over xfs, depending on the situation
+- name: mkfs -t ext4 /dev/vg01/lv_home
+  shell: mkfs -t ext4 /dev/vg01/lv_home
+
+- name: mount /dev/vg01/lv_home /home
+  shell: mount /dev/vg01/lv_home /home
+
+- name: mkfs -t ext4 /dev/vg01/lv_var
+  shell: mkfs -t ext4 /dev/vg01/lv_var
+
+- name: mount /dev/vg01/lv_var /var
+  shell: mount /dev/vg01/lv_var /var
+
+# df -hT
+#  -T flag shows filesystem type
