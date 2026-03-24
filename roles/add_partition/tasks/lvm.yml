@@ -38,11 +38,25 @@
   # in many aspects and is the default filesystem with RHEL 
   # servers, that said, there are advantages of using ext4 
   # over xfs, depending on the situation
+  # https://unix.stackexchange.com/questions/715626/the-best-way-to-mount-existing-non-empty-directory-to-lvm
   - name: mkfs -t ext4 /dev/vg01/lv_home
     shell: mkfs -t ext4 /dev/vg01/lv_home
 
+  # Note: running umount gives message umount: /var: not mounted. on AWS EC2 Debian 13 
+  - name: mv /home /home.old
+    shell: mv /home /home.old
+  
+  - name: mkdir /home
+    shell: mkdir /home
+
   - name: mount /dev/vg01/lv_home /home
     shell: mount /dev/vg01/lv_home /home
+
+  - name: cp -rp /home.old/* /home
+    shell: cp -rp /home.old/* /home
+
+  - name: create a home/var (for testing)
+    shell: mkdir /home/var
 
   - name: mkfs -t ext4 /dev/vg01/lv_var
     shell: mkfs -t ext4 /dev/vg01/lv_var
