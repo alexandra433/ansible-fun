@@ -110,7 +110,7 @@ Create ansible_usr on remote servers (server 1 and 2)
     sudo visudo
 
     #Paste this line
-    ansible_usr ALL=(ALL) NOPASSWD:ALL
+    ansible_usr ALL=(ALL) ALL
     ```
   - Restart ssh
     - `sudo systemctl restart ssh`for debian
