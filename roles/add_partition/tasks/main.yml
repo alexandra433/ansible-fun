@@ -32,7 +32,7 @@
       assert:
         that:
           - '"/dev/xvda2" not in verify_output_1.stdout'
-          - '"GPT PMBR size mismatch" in verify_output_1.stdout'
+          - '"GPT PMBR size mismatch" in verify_output_1.stderr'
   become: true
   become_user: root
           

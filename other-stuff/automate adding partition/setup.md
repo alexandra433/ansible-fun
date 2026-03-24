@@ -132,7 +132,8 @@ Create ansible_usr on remote servers (server 1 and 2)
     }
     ```
 
-ansible-playbook test_partition.yml --extra-vars "survey_target=deb_server1" -v
+Command: 
+`ansible-playbook test_partition.yml --extra-vars "survey_target=deb_server1, ansible_usr_pass=<redacted>" --ssh-extra-args="-o StrictHostKeyChecking=no" -v`
 
 ```
 root@ip-172-31-16-201:~/ansible-fun# ansible-playbook test_partition.yml --extra-vars "survey_target=deb_server1, ansible_usr_pass=<redacted>" -v
