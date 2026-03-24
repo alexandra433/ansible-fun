@@ -12,25 +12,25 @@
     var_increase: "100%FREE"
 
 
-- name: pvcreate /dev/xvda2
-  shell: "pvcreate /dev/xvda2"
+- name: /usr/sbin/pvcreate /dev/xvda2
+  shell: "/usr/sbin/pvcreate /dev/xvda2"
 
 - name: vgcreate vg01 /dev/xvda2
-  shell: "vgcreate vg01 /dev/xvda2"
+  shell: "/usr/sbin/vgcreate vg01 /dev/xvda2"
 
 # - name: swapoff -a
 #   shell: swapoff -a
 
 # https://medium.com/@yhakimi/lvm-how-to-create-and-extend-a-logical-volume-in-linux-9744f27eacfe
 - name: lvcreate --name lv_home -L +500M vg01
-  shell: "lvcreate --name lv_home -L +{{ home_increase }} vg01"
+  shell: "/usr/sbin/lvcreate --name lv_home -L +{{ home_increase }} vg01"
 
 - name: lvcreate --name lv_var -l +100%FREE vg01
-  shell: "lvcreate --name lv_var -l +{{ 100%FREE }} vg01"
+  shell: "/usr/sbin/lvcreate --name lv_var -l +{{ 100%FREE }} vg01"
 
-- name: install xfsprogs
-  apt:
-    name: xfsprogs
+# - name: install xfsprogs
+#   apt:
+#     name: xfsprogs
 
 # *The xfs filesystem is an upgrade from ext4 
 # in many aspects and is the default filesystem with RHEL 
