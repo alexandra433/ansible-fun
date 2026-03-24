@@ -33,7 +33,7 @@
   become_user: root
           
 - name: Run fdisk command.
-  shell: 'printf "n\n2\n\n\nt\n2\n44\nw" | /usr/sbin/fdisk /dev/xvda'
+  shell: 'printf "n\n2\n\n\nt\n2\n44\nw\n" | /usr/sbin/fdisk /dev/xvda'
   register: partition_output
   failed_when:
     - '"Created a new partition" not in partition_output.stdout'
