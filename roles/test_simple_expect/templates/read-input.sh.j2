@@ -2,7 +2,10 @@
 
 echo "Hello, what is your favorite pie?"
 read piechoice
-echo "Ew"
+if [[ "$piechoice" == "key lime" ]];
+  echo "nice"
+else
+  echo "Ew"
 echo "Generating public/private rsa key pair."
 echo "Enter file in which to save the key (/home/username/.ssh/id_rsa):"
 read filename
